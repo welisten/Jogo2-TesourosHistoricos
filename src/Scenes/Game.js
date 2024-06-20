@@ -3,14 +3,13 @@ import  { User }  from '../Class/User.js';
 import { valuesObj } from "../Consts/Values.js";
 
 class MemoryGame {
-    constructor(size) {
+    constructor(size, user_name) {
         this.size = size;
         this.cards = [];
         this.flippedCards = [];
-        this.user = new User('Wesley')
+        this.user = new User(user_name)
         this.song = undefined
         this.generateCards();
-        this.song.play()
     }
 
 
@@ -105,7 +104,7 @@ class MemoryGame {
 
             if (card.isFlipped) cardElement.classList.add('flipped');
             if (card.isMatched) cardElement.classList.add('matched');
-            if (card.isNotMatched) cardElement.classList.add('isNotMatched');
+            if (card.incorrectMatch) cardElement.classList.add('isNotMatched');
 
             cardElement.addEventListener('click', () => this.flipCard(index));
             board.appendChild(cardElement);
@@ -119,6 +118,9 @@ class MemoryGame {
         this.song = new Audio('./Assets/songs/main.wav')
         this.song.loop = true
         this.song.volume = .5
+        setTimeout(() => {
+            this.song.play()
+        }, 1500)
     }
 }
 
