@@ -1,64 +1,65 @@
-import { MemoryGame } from './Scenes/Game.js';
 import { IntroForm } from './Scenes/Form.js'; 
 
-// const game = new MemoryGame(16);
-const intro = new IntroForm()
-// game.startGame();
-intro.start()
 
 const mainContainers = document.querySelectorAll('.mainContainer')
-const boardWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
+const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
+
 mainContainers.forEach(container => {
-  container.style.width = `${boardWidth}px`
-  container.style.height = `${boardWidth}px`  
+  container.style.width = `${containerWidth}px`
+  container.style.height = `${containerWidth}px`  
 })
 
-const lightBtn = document.getElementById('lightMode')
-const acessibleContainer = document.getElementById('gameAccessibleContainer')
-const gameBoard = document.getElementById('gameBoard')
-
-lightBtn.addEventListener('click', () => {
-  if(lightBtn.classList.contains('active')){
-    lightBtn.classList.remove('active')
+const darkBtn = document.getElementById('lightMode')    //entrando no modo LIGHT
+darkBtn.addEventListener('click', () => {
+  if(darkBtn.classList.contains('active')){ //
+    darkBtn.classList.remove('active')
+   
     document.querySelector('body').style.backgroundColor = '#efefef'
     document.querySelector('#gameAccessibleContainer').style.backgroundColor = '#efefef'
-    document.querySelector('#gameAccessibleContainer').style.color = '#3e3e3f'
+    document.querySelector('#gameDisplay').style.backgroundColor = '#efefef'
+    document.querySelector('#gameDisplay').style.border = '3px solid rgb(5, 109, 179)'
+    document.querySelector('#gameAccessibleContainer').style.border = '3px solid rgb(5, 109, 179)'
+
     document.querySelector('#gameBoard').style.backgroundColor = '#efefef'
-    console.log(lightBtn)
+    document.querySelector('#gameAccessibleContainer').style.color = '#3e3e3f'
 
+    document.querySelector('.clock').style.border = '1px solid #3e3e3f'
+    document.querySelector('.cardName').style.color = '#3e3e3f'
+    document.querySelector('.cardLocation').style.color = '#3e3e3f'
+    document.querySelector('.clockNumbers').style.color = '#3e3e3f'
+    document.querySelector('.clockSecond').style.color = '#3e3e3f'
+    document.querySelector('.fa-clock').style.color = '#3e3e3f'
   }else{
-    lightBtn.classList.add('active')
-
-    document.querySelector('body').style.backgroundColor = '#3e3e3f'
-    document.querySelector('#gameBoard').style.backgroundColor = '#000'
-    document.querySelector('#gameAccessibleContainer').style.backgroundColor = '#000'
-    document.querySelector('#gameAccessibleContainer').style.color = '#efefef'
-// 
-    console.log(lightBtn)
+    darkBtn.classList.add('active')     //entrando no modo DARK
     
+    document.querySelector('body').style.backgroundColor = '#111111'
+    document.querySelector('#gameBoard').style.backgroundColor = '#000'
+    document.querySelector('#gameAccessibleContainer').style.backgroundColor = '#ffffff10'
+    document.querySelector('#gameDisplay').style.backgroundColor = '#ffffff10'
+    document.querySelector('#gameAccessibleContainer').style.color = '#efefef'
+
+    document.querySelector('.clock').style.border = '1px solid bisque'
+    document.querySelector('.cardName').style.color = '#efefef'
+    document.querySelector('.cardLocation').style.color = '#efefef'
+    document.querySelector('.clockNumbers').style.color = '#efefef'
+    document.querySelector('.clockSecond').style.color = '#efefef'
+    document.querySelector('.fa-clock').style.color = '#efefef'
   }
 })
 
 const btns = document.querySelectorAll('.lightMode_btn');
-
 btns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        // Remover a classe que define o estilo :hover
-        btn.classList.remove('hovered');
-        
-        // Aqui você pode adicionar o código adicional que deseja executar quando o botão for clicado
-        console.log('Clicou no botão de modo claro');
-    });
-
-    // Adicionar um event listener para adicionar a classe quando o mouse entrar no botão
-    btn.addEventListener('mouseenter', () => {
-        btn.classList.add('hovered');
-    });
-
-    // Adicionar um event listener para remover a classe quando o mouse sair do botão
-    btn.addEventListener('mouseleave', () => {
-        btn.classList.remove('hovered');
-    });
+  btn.addEventListener('click', (e) => {
+    btn.classList.remove('hovered');
+  });
+  
+  btn.addEventListener('mouseenter', () => {
+    btn.classList.add('hovered');
+  });
+  
+  btn.addEventListener('mouseleave', () => {
+    btn.classList.remove('hovered');
+  });
 });
 
-console.log(lightBtn)
+const intro = new IntroForm()

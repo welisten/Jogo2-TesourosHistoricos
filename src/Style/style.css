@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100..900&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -11,14 +13,14 @@
 
 
     --control-btn-color: #013b6b;
-    --body-color-dark: #3e3e3f
+    --body-color-dark: #111111;
     --body-color-light: #efefef;
 }
 html{
     font-size: 62.5%;
 }
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Exo 2", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -26,7 +28,7 @@ body {
     height: 100vh;
     
 
-    background-color: #3e3e3f;
+    background-color: var(--body-color-dark);
 }
 h1 {
     margin-bottom: 20px;
@@ -38,7 +40,6 @@ h1 {
     height: 100%;
     background-color: black;
     border: 5px solid #3498db;
-    box-shadow: inset 0 0 .5em #b4e1ff;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -189,17 +190,90 @@ h1 {
 #gameAccessibleContainer{
     position: absolute;
     right: -55%;
-    top: 50%;
-    height: 80%;
+    top: 0;
+    height: 75%;
     width: 50%;
-    transform: translateY(-50%);
-    border: 1px solid #67c2ff;
-    box-shadow: 0 0 .5em rgba(29, 127, 255, 0.781);
-    background-color: #000;
+    border: 2px solid #056db3;
+    background-color: var(--body-color-dark);
+    backdrop-filter: blur(50px);
     border-radius: 15px;
     padding: 2vh;
     color: #efefef;
 }
+
+#gameDisplay{
+    position: absolute;
+    bottom: 0;
+    right:  -55%;
+    height: 23%;
+    width: 50%;
+    background-color: #ffffff34;
+    background-color: var(--body-color-dark);
+    backdrop-filter: blur(50px);
+    border: 2px solid #056db3;
+    border-radius: 15px;
+    color: #efefef;
+    display: flex ;
+    font-family: "Exo 2", sans-serif;
+
+}
+#gameDisplay .clock{
+    width: 40%;
+    height: calc(100% - 2vh);
+    position: relative;
+    border: 1px solid bisque;
+    border-radius: 15px;
+    padding: 5px;
+    margin: 1vh;
+    margin-right: 0px;
+    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+}
+#gameDisplay .clock .fa-clock{
+    position: absolute;
+    font-size: 40%;
+    top: 1vh;
+    right: 1vh;
+}
+#gameDisplay .clock .clockNumbers{
+    line-height: 100%;
+    margin: auto 0;
+}
+#gameDisplay .clock .clockSecond{
+    font-size: 50%;
+    margin-top: 50%;
+}
+#gameDisplay .info{
+    width: 60%;
+    height: 100%;
+    border-radius: 15px;
+}
+#gameDisplay .info .cardName{
+    height: 70%;
+    width: 100%;
+    border-radius: 15px;
+    font-size: 1.8rem;
+    line-height: 2rem;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 1vh;
+}
+#gameDisplay .info .cardLocation{
+    width: 100%;
+    padding-bottom: 5px;
+    border-radius: 15px;
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 2rem;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 #gameContainer{
     position: relative;
@@ -240,7 +314,7 @@ h1 {
 #gameBoard {
     /* width e height estão definidos no JS; */
     position: relative;
-    border: 2px solid #023353;
+    border: 5px solid #3498db;
     border-radius: 15px;
     justify-content: center;
     align-items: center;

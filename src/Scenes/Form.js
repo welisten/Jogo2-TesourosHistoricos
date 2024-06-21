@@ -2,7 +2,7 @@ import { MemoryGame } from './Game.js';
 
 class IntroForm {
     constructor(){
-        this.ucarineSong = new Audio('./Assets/songs/ucarine.wav')
+        this.ucarineSong    = new Audio('./Assets/songs/ucarine.wav')
         this.transitionSong = new Audio('./Assets/songs/intro.wav')
         this.generateScene()
     }
@@ -23,6 +23,7 @@ class IntroForm {
         formBody.classList.add('formBody')
         startBtn.classList.add('startBtn')
         
+        formTitle.innerText = ''
         nameLabel.setAttribute('for', 'user_name') 
         nameLabel.textContent =  'Nome :'
         nameLabel.title = "Digite se nome"
@@ -30,7 +31,6 @@ class IntroForm {
         nameInput.name = 'user_name'
         nameInput.placeholder = 'Digite seu nome'
         nameInput.id = 'user_name'
-
         startBtn.textContent = 'iniciar'
 
         formBody.appendChild(nameLabel)
@@ -39,13 +39,13 @@ class IntroForm {
         introForm.appendChild(formTitle)
         introForm.appendChild(formBody)
         formContainer.appendChild(introForm)
+        
+        this.handleElements()
 
         let aux = 0
         let title = 'Ola! Vamos começar digitando o seu Nome.'
-        formTitle.textContent = title
         let writerDelay = 50
-        formTitle.textContent = title
-        formTitle.innerText = ''
+        
         setTimeout(() => {
             function typewriter(){
                 if(aux >= title.length){
@@ -58,24 +58,32 @@ class IntroForm {
                 
                 let delay = writerDelay
                 if(currentChar == '.' || currentChar == '!' || currentChar == '?' || currentChar == ',')
-                    delay = 1000
+                    delay = 500
                 setTimeout(typewriter, delay)
             }
         typewriter()
         }, 2000)
-        
+    }
+
+    handleElements(){
+        const nameInput = document.querySelector('.nameInput')
+        const nameLabel = document.querySelector('.nameLabel')
+        const startBtn  = document.querySelector('.startBtn')
+        const introForm = document.querySelector('.introForm')
+        const formContainer = document.querySelector('#introFormContainer')
+
         nameInput.addEventListener('focus', ()=>{
             nameLabel.style.transform = 'translateY(0)'
             nameLabel.style.color = 'white'
         })
+
         nameInput.addEventListener('blur', ()=>{
             if(nameInput.value == ''){
                 nameLabel.style.transform = 'translateY(4.8vh)'
                 nameLabel.style.color = 'black'
-
             }
-            console.log(nameInput.value)
         })
+        
         startBtn.addEventListener('click', (e) => {
             e.preventDefault()
             if(nameInput.value != ''){
@@ -84,12 +92,15 @@ class IntroForm {
                 introForm.style.opacity = 0
                 setTimeout(() => {
                     const game = new MemoryGame(16, nameInput.value)
+                    game.startGame()
+                    
                     const gameBoard = document.getElementById('gameBoard')
                     const rulers = document.querySelectorAll('.ruler')
+                    
+                    gameBoard.style.display     = 'grid'
                     formContainer.style.display = "none"
-                    gameBoard.style.display = 'grid'
+
                     rulers.forEach(ruler => ruler.style.display = 'flex')
-                    game.startGame()
                 }, 1000)
 
             }else{
@@ -99,16 +110,10 @@ class IntroForm {
     }
 
     generateScene(){
-        // this.songsucarine.loop = true
-        // this.songs.ucarine.volume = 1
+        this.ucarineSong.loop = true
+        this.ucarineSong.volume = 1
         this.ucarineSong.play()
         this.generateForm()
-
-    }
-
-
-    start(){
-        // this.generateForm()
     }
 }
 
