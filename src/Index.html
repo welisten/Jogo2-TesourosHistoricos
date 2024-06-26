@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="PT-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo 2</title>
 
     <script type="module" src="./script.js"></script>
+    <!-- jquery-3.6.0 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- FitText.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FitText.js/1.2.0/jquery.fittext.min.js"></script>
+    <!-- font-awesome - 6.5.2 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="./Style/style.css">
 </head>
@@ -13,10 +18,10 @@
     <div id="gameContainer" class="mainContainer">
         <div id="introFormContainer" ></div>
         <div id="gameControls">
-            <button class="btn mute_btn" id="mute" title="Som do jogo">
-                <i class="fa-solid fa-volume-high" id="mute_icon"></i>
+            <button class="btn mute_btn active" id="mute" title="Som do jogo">
+                <i class="fa-solid fa-volume-high " id="mute_icon"></i>
             </button>
-            <button class="btn libras_btn" id="" title="Movimentação acessível" title="Linguagem de sinais">
+            <button class="btn libras_btn " id="" title="Movimentação acessível" title="Linguagem de sinais">
                 <i class="fa-solid fa-hands"></i>
             </button>
             <button class="btn screenReader_btn" id="" title="Leitor de tela">
@@ -27,26 +32,23 @@
             </button>
         </div>
         <div id="horizontalRuler" class="ruler horizontalRuler">
-        <div class="identifier"><span>A</span></div>
-        <div class="identifier"><span>B</span></div>
-        <div class="identifier"><span>C</span></div>
-        <div class="identifier"><span>D</span></div>
+            <div class="identifier"><span>A</span></div>
+            <div class="identifier"><span>B</span></div>
+            <div class="identifier"><span>C</span></div>
+            <div class="identifier"><span>D</span></div>
         </div>
         <div id="verticalRuler" class="ruler verticalRuler">
-        <div class="identifier"><span>1</span></div>
-        <div class="identifier"><span>2</span></div>
-        <div class="identifier"><span>3</span></div>
-        <div class="identifier"><span>4</span></div>
+            <div class="identifier"><span>1</span></div>
+            <div class="identifier"><span>2</span></div>
+            <div class="identifier"><span>3</span></div>
+            <div class="identifier"><span>4</span></div>
         </div>
         <div id="gameBoard" class="mainContainer"></div>
-        <div id="gameAccessibleContainer"></div>
-        <div id="gameDisplay">
-            <div class="clock"><i class="fa-regular fa-clock"></i></div>
-            <div class="info">
-                <div class="cardName"></div>
-                <div class="cardLocation"></div>
-            </div>
+        <div id="gameBoard_aside">
+            <div id="gameDisplay"></div>
+            <div id="gameAccessibleContainer" class="gameAccessibleContainer"></div>
         </div>
+        
     </div>
 </body>
 </html>

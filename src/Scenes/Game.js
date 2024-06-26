@@ -1,16 +1,20 @@
 import  { Card }  from '../Class/Card.js';
 import  { User }  from '../Class/User.js';
 import { valuesObj } from "../Consts/Values.js";
+// import  { DisplayHeader } from '../Class/DisplayHeader.js'
 
 class MemoryGame {
-    constructor(size, user_name) {
+    constructor(size, user_name, gameDisplay) {
+        this.container = document.querySelector('#gameContainer')
         this.size = size;
         this.cards = [];
         this.flippedCards = [];
+        this.lastFlippedCard = undefined
         this.user = new User(user_name)
+        this.gameDisplay = gameDisplay
         this.song = undefined
         this.clock = undefined
-        this.time = 0
+        this.level = 0
         this.generateCards();
     }
 
@@ -53,20 +57,23 @@ class MemoryGame {
     flipCard(index) {
         const card = this.cards[index];
         const selectSong = new Audio('./Assets/songs/select.wav')
-        const infoNome = document.querySelector('.cardName')
-        const infoLocation = document.querySelector('.cardLocation')
         
         if (card.isFlipped || card.isMatched) return;
         
-        infoNome.textContent = card.value
-        infoLocation.textContent = `${card.location.collumn}${card.location.row}`
-
+        
+        this.gameDisplay.header.setCardsInfo(card.value, `${card.location.collumn}${card.location.row}`)
+        this.gameDisplay.header.updateInfo()
+        this.gameDisplay.body.updateImg(card.URL) 
+        
+        this.gameDisplay.footer.updateFooterText(card.description, this.fitTextContect)
+        
         card.flip();
         this.flippedCards.push(card);
         this.updateBoard()
         selectSong.play()
 
         if (this.flippedCards.length === 2) {
+            // this.gameDisplay.footer.updateFooterText(card.description, this.fitTextContect)
             this.checkForMatch();
         }
     }
@@ -84,6 +91,7 @@ class MemoryGame {
             card2.match();
             setTimeout(() => successSong.play(), 500)
             this.user.treasure++
+            this.gameDisplay.bar.updateTreasures(this.user.treasure)
         } else {
             card1.fail()
             card2.fail()
@@ -98,7 +106,6 @@ class MemoryGame {
             }, 1500);
         }
         if(this.user.treasure == 8){
-            accessibleContainer.innerHTML = `<p>Parabens ${this.user.name}! Voçê completou o Jogo em ${this.time - 1 } segundos</p>`
             this.song.pause()
             
             victorySong.play()
@@ -133,8 +140,6 @@ class MemoryGame {
             if (card.incorrectMatch) cardElement.classList.add('isNotMatched');
 
             cardElement.addEventListener('click', () => {
-
-
                 this.flipCard(index)
             });
             board.appendChild(cardElement);
@@ -142,33 +147,46 @@ class MemoryGame {
         });
         
     }
+    fitTextContect(identificador){
+        const elem = document.querySelector(identificador)
+        const parent = elem.parentNode
+        const parentHeight = parent.clientHeight
+        const fontsize = elem.style.fontSize == '2rem' ? '2rem' : elem.style.fontSize
+        elem.style.transition = 'none'
+        if(elem.scrollHeight > (parentHeight - 20) ){
+            $(document).ready(function(){
+                console.log(elem.scrollHeight,(parentHeight - 20), elem)
+                console.log('confere')
+                $(identificador).fitText(2)
+            })
+        }else{
+            elem.style.fontSize = fontsize
+            console.log(elem.scrollHeight,(parentHeight - 20), elem)
+            console.log('não confere')
 
+        }
+    }
     startClock(){
-            const clock = document.querySelector('.clock')
-            const clockNumber = document.createElement('div')
-            const clockSec = document.createElement('span')
-            clockNumber.textContent = '00'
-            clockSec.textContent = 's'
-
-            clockNumber.classList.add('clockNumbers')
-            clockSec.classList.add('clockSecond')
-
-            clock.appendChild(clockNumber)
-            clock.appendChild(clockSec)
-
             this.clock = setInterval(()=>{
-                let clockTime = this.time <= 9 ? `0${this.time}` : this.time
-                clockNumber.textContent = clockTime
-                this.time++
+                this.gameDisplay.header.increaseTimer(1)
+                this.gameDisplay.header.updateClock()
             }, 1000)
     }
 
     startGame() {
+        // console.log(JQuery)
+        this.level = 1
         this.updateBoard();
+        this.gameDisplay.header.setCardsInfo('', '')
+        this.gameDisplay.header.setTimer(0)
+        this.gameDisplay.update()
+        this.gameDisplay.bar.updateLevel(this.level)
+        this.gameDisplay.bar.updateName(this.user.name.split(' ')[0])
         this.startClock();
+
         this.song = new Audio('./Assets/songs/main.wav')
         this.song.loop = true
-        this.song.volume = .5
+        this.song.volume = 0.5 // .5
         setTimeout(() => {
             this.song.play()
         }, 1500)

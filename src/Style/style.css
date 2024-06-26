@@ -13,7 +13,7 @@
 
 
     --control-btn-color: #013b6b;
-    --body-color-dark: #111111;
+    --body-color-dark: #070707;
     --body-color-light: #efefef;
 }
 html{
@@ -38,7 +38,6 @@ h1 {
 #introFormContainer{
     width: 100%;
     height: 100%;
-    background-color: black;
     border: 5px solid #3498db;
     border-radius: 15px;
     display: flex;
@@ -46,8 +45,8 @@ h1 {
     justify-content: center;
 }
 .introForm{
-    background-color: #ffffff23;
-    backdrop-filter: blur(50px);
+    background-color: #00000023;
+    backdrop-filter: blur(23px);
     height: 30vh;
     width: 60%;
     padding:2vh 15px 0;
@@ -164,96 +163,135 @@ h1 {
     transform: translateY(-50%);
 }
 #gameControls .btn {
-  padding: 7px;
-  margin: 5px;
-  border: 1px solid white;
-  color: #fff;
-  font-size: 1.7rem;
-  border-radius: 7px;
-  transition: 0.5s;
-  transition-property: box-shadow;
-  background: var(--control-btn-color);
+    padding: 7px;
+    margin: 5px;
+    border: 1px solid white;
+    color: #fff;
+    font-size: 1.7rem;
+    border-radius: 7px;
+    transition: 0.5s;
+    transition-property: box-shadow;
+    background: var(--control-btn-color);
 }
 #gameControls .btn:hover {
-  box-shadow: 0 0 5px rgb(68, 170, 253),
-              0 0 25px rgb(68, 170, 253),
-              0 0 50px rgb(68, 170, 253),
-              0 0 100px rgb(68, 170, 253);
+    box-shadow: 0 0 5px rgb(68, 170, 253),
+    0 0 25px rgb(68, 170, 253),
+    0 0 50px rgb(68, 170, 253),
+    0 0 100px rgb(68, 170, 253);
 }
 #gameControls .btn.active {
-  box-shadow: 0 0 5px rgb(68, 170, 253),
-              0 0 25px rgb(68, 170, 253),
-              0 0 50px rgb(68, 170, 253),
-              0 0 100px rgb(68, 170, 253);
+    box-shadow: 0 0 5px rgb(68, 170, 253),
+    0 0 25px rgb(68, 170, 253),
+    0 0 50px rgb(68, 170, 253),
+    0 0 100px rgb(68, 170, 253);
 }
 
-#gameAccessibleContainer{
+#gameBoard_aside{
     position: absolute;
-    right: -55%;
-    top: 0;
-    height: 75%;
+    height: 100%;
     width: 50%;
-    border: 2px solid #056db3;
+    top: 0;
+    left: calc(100% + 2vh);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#gameAccessibleContainer{
+    height: 0%;
+    width: 100%;
+    display: none;
+    border: 1px solid #3498db;
     background-color: var(--body-color-dark);
     backdrop-filter: blur(50px);
     border-radius: 15px;
     padding: 2vh;
     color: #efefef;
+    transition: width 1s ease, height 1s ease, opacity .95s ease  ;
+    transform-origin: center;
 }
+
 
 #gameDisplay{
-    position: absolute;
-    bottom: 0;
-    right:  -55%;
-    height: 23%;
-    width: 50%;
-    background-color: #ffffff34;
+    height: 100%;
+    width: 100%;
+    margin:  0;
     background-color: var(--body-color-dark);
+    background-color: #ffffff10;
     backdrop-filter: blur(50px);
-    border: 2px solid #056db3;
+    /* border: 2px solid ; */
+    border: 1px solid #3498db;
     border-radius: 15px;
     color: #efefef;
-    display: flex ;
     font-family: "Exo 2", sans-serif;
-
+    transition: height 1s ease, margin 1s ease-out
+    
 }
-#gameDisplay .clock{
-    width: 40%;
-    height: calc(100% - 2vh);
+#gameDisplay .line{
+    position: absolute;
+    bottom: -0%;
+    left: 5%;
+    width: 90%;
+    height: 1px;
+    border-bottom: 1px solid #ffffff80;
+}
+#gameDisplay_header{
     position: relative;
-    border: 1px solid bisque;
-    border-radius: 15px;
+    height: 25%; /*estado inicial*/
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    /* border: 1px solid; */
+}
+#gameDisplay_header display{
+    transition: none;
+}
+#gameDisplay_header .clock{
+    width: 40%;
+    /* height: 14vh; */
+    position: relative;
+    background-color: var(--body-color-dark);
+    border: 2px solid #ffffff56;
+    border-radius: 10px;
     padding: 5px;
-    margin: 1vh;
+    margin: auto;
     margin-right: 0px;
-    font-size: 5rem;
+    font-size: 3.5rem;
     display: flex;
     justify-content: center;
+    align-items: center;
+
 }
-#gameDisplay .clock .fa-clock{
+#gameDisplay_header .clock .fa-clock{
     position: absolute;
     font-size: 40%;
+    color: #ffffff56;
     top: 1vh;
     right: 1vh;
 }
-#gameDisplay .clock .clockNumbers{
+#gameDisplay_header .clock .clockNumber{
+    text-align: end;
     line-height: 100%;
     margin: auto 0;
+    font-size: 4rem;
 }
-#gameDisplay .clock .clockSecond{
-    font-size: 50%;
-    margin-top: 50%;
+#gameDisplay_header .clock .clockSecond{
+    font-size: 2.5rem;
+    font-weight: 200;
+
 }
-#gameDisplay .info{
-    width: 60%;
-    height: 100%;
+#gameDisplay_header .info{
+    width: 55%;
+    height: 17vh;
     border-radius: 15px;
+    margin: auto 0 auto auto;
 }
-#gameDisplay .info .cardName{
-    height: 70%;
+#gameDisplay_header .info .cardName{
+    height: 75%;
     width: 100%;
     border-radius: 15px;
     font-size: 1.8rem;
+    font-weight: 200;
     line-height: 2rem;
     display: flex;
     text-align: center;
@@ -261,23 +299,125 @@ h1 {
     justify-content: center;
     padding: 0px 1vh;
 }
-#gameDisplay .info .cardLocation{
+#gameDisplay_header .info .cardLocation{
     width: 100%;
     padding-bottom: 5px;
     border-radius: 15px;
     font-size: 2rem;
-    font-weight: bold;
+    font-weight: 500;
     line-height: 2rem;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+#gameDisplay_bar{
+    height: 10%;
+    width: 100%;
+    position: relative;
+    font-weight: 200;
+    
+}
+#gameDisplay_bar .userName{
+    /* border: 1px solid blue; */
+
+    height: 100%;
+    width: calc(40% + 3vh);
+    text-align: center;
+    align-content: center;
+    font-size: 2.5rem;
+    font-weight: inherit;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+#gameDisplay_bar .userTreasure{
+    position: relative;
+    width: calc(20%);
+    font-weight: inherit;
+
+    height: 100%;
+    align-content: center;
+    display: inline-block;
+    /* border: 1px solid red; */
+
+}
+#gameDisplay_bar .userTreasure img{
+    height: 80%;
+    transform: translateY(10%);
+}
+#gameDisplay_bar .userTreasure .treasuresNumber{
+    position: absolute;
+    top: 0%;
+    left: -25%;
+    width: 3.2rem;
+    height: 3.2rem;
+    font-size: 2rem;
+    font-weight: inherit;
+    line-height: 2.8rem;
+    text-align: center;
+    /* background-color: #ffffff10; */
+    /* backdrop-filter: blur(50px); */
+    /* border:  1px solid rgba(255, 255, 255, 0.315); */
+    border-radius: 50%;
+    z-index: 10;
+}
+#gameDisplay_bar .userLevel{
+    /* border: 1px solid green; */
+    height: 100%;
+    width: calc(40% - 3vh);
+    font-size: 2rem;
+    font-weight: inherit;
+    text-align: center;
+    align-content: center;
+    padding-right: 3%;
+
+}
+#gameDisplay_body{
+    height: 40%;
+    width: calc(.8 * 100%);
+    width: 100%;
+    /* border: 1px solid #00ab00; */
+    padding: 3vh;
+    padding:3vh calc(3vh + (.1 * 100%));
+    margin: auto;
+    position: relative;
+}
+#gameDisplay_body .bodyImg_Container{
+    border: 2px solid #ffffff56;
+    background-color: var(--body-color-dark);
+    height: 100%;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+}
+#gameDisplay_body .bodyImg_Container .bodyImg{
+    height: 100%;
+    width: 100%;
+    background-size: contain;
+    transform: scale(1.1);
+
+}
+#gameDisplay_footer{
+    height: 23%;
+    width: 100%;
+    align-content: center;
+    font-weight: 100;
+}
+#gameDisplay_footer .description{ 
+    font-size: 2rem;
+    font-weight: inherit;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+
 
 
 #gameContainer{
     position: relative;
     font-size: 3rem;
+    
 }
 #gameContainer .horizontalRuler{
     width: 100%;
@@ -321,6 +461,7 @@ h1 {
     padding-left: 2%;
     /* background-color: rgb(10, 10, 10); */
     background-color: black;
+    
     display: none;
     grid-template-columns: repeat(4, 25%);
 }
@@ -373,11 +514,12 @@ h1 {
     cursor: default;
 }
 
-@media screen and (min-width: 2560px ) { /*wideScreen*/
-    .introForm .formTitle{
-        font-size: clamp(2.8rem, 3.1rem, 3.2rem);
-    }
+@keyframes formFadeIn{
+    0%{opacity: 0;}
+    100%{ opacity: 1;}
 }
+
+
 @media screen and (max-height: 900px ) {
     .ruler span{
         font-size: 2.3rem;
@@ -401,10 +543,19 @@ h1 {
     .introForm .formBody .startBtn{
         font-size: 1.4rem;
     }
+
+    #gameDisplay_header .clock{
+    }
+    #gameDisplay_header .info{
+        /* border: 1px solid; */
+    }
 }
 
-@keyframes formFadeIn{
-    0%{opacity: 0;}
-    100%{ opacity: 1;}
-    
+@media screen and (min-width: 2560px ) { /*wideScreen*/
+    .introForm .formTitle{
+        font-size: clamp(2.8rem, 3.1rem, 3.2rem);
+    }
 }
+
+
+

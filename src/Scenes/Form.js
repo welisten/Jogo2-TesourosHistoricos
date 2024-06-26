@@ -1,14 +1,29 @@
-import { MemoryGame } from './Game.js';
+import  { MemoryGame } from './Game.js';
+import  { GameDisplay } from '../Class/GameDisplay.js'
+import  { GameAcessibleDisplay} from '../Class/GameAccessible.js'
 
 class IntroForm {
     constructor(){
         this.ucarineSong    = new Audio('./Assets/songs/ucarine.wav')
         this.transitionSong = new Audio('./Assets/songs/intro.wav')
+        this.lightBtn =  document.querySelector('.lightMode_btn')
+        this.gameDisplay   = 'undefined'
+        this.gameAcessibleDisplay   = 'undefined'
+        this.game = 'undefined'
+        this.formContainer = ''
         this.generateScene()
     }
-    
+    generateScene(){
+        this.ucarineSong.loop = true
+        this.ucarineSong.volume = 1
+        this.ucarineSong.play()
+        
+        this.generateForm()
+        this.generateAside()
+    }
     generateForm(){
-        const formContainer = document.getElementById('introFormContainer')
+        this.formContainer = document.getElementById('introFormContainer')
+
         const introForm = document.createElement('form')
         const formTitle = document.createElement('h2')
         const formBody = document.createElement('div')
@@ -26,7 +41,7 @@ class IntroForm {
         formTitle.innerText = ''
         nameLabel.setAttribute('for', 'user_name') 
         nameLabel.textContent =  'Nome :'
-        nameLabel.title = "Digite se nome"
+        nameLabel.title = "Digite seu nome"
         nameInput.type = 'text'
         nameInput.name = 'user_name'
         nameInput.placeholder = 'Digite seu nome'
@@ -38,7 +53,7 @@ class IntroForm {
         formBody.appendChild(startBtn)
         introForm.appendChild(formTitle)
         introForm.appendChild(formBody)
-        formContainer.appendChild(introForm)
+        this.formContainer.appendChild(introForm)
         
         this.handleElements()
 
@@ -65,18 +80,38 @@ class IntroForm {
         }, 2000)
     }
 
+    generateAside(){
+        const gameBoard_aside = document.getElementById('gameBoard_aside')
+        this.gameDisplay = new GameDisplay(gameBoard_aside)
+        this.gameAcessibleDisplay = new GameAcessibleDisplay(gameBoard_aside)
+
+    }
+
+    toggleLight(){
+        const form = document.querySelector('.introForm')
+        if(this.lightBtn.classList.contains('active')){
+            this.formContainer.style.backgroundColor =  `black`
+            form.style.backgroundColor =  `#ffffff23`
+            form.style.boxShadow = '0 0 .5em rgba(29, 127, 255, 0.781)'
+        }
+        else
+        {
+            this.formContainer.style.backgroundColor = `white`
+            form.style.backgroundColor = `#3498db`
+            form.style.boxShadow ='none'
+        }
+    }
     handleElements(){
         const nameInput = document.querySelector('.nameInput')
         const nameLabel = document.querySelector('.nameLabel')
         const startBtn  = document.querySelector('.startBtn')
         const introForm = document.querySelector('.introForm')
-        const formContainer = document.querySelector('#introFormContainer')
-
+        
         nameInput.addEventListener('focus', ()=>{
             nameLabel.style.transform = 'translateY(0)'
             nameLabel.style.color = 'white'
         })
-
+        
         nameInput.addEventListener('blur', ()=>{
             if(nameInput.value == ''){
                 nameLabel.style.transform = 'translateY(4.8vh)'
@@ -91,14 +126,14 @@ class IntroForm {
                 this.transitionSong.play()
                 introForm.style.opacity = 0
                 setTimeout(() => {
-                    const game = new MemoryGame(16, nameInput.value)
-                    game.startGame()
+                    this.game = new MemoryGame(16, nameInput.value, this.gameDisplay)
+                    this.game.startGame()
                     
                     const gameBoard = document.getElementById('gameBoard')
                     const rulers = document.querySelectorAll('.ruler')
                     
                     gameBoard.style.display     = 'grid'
-                    formContainer.style.display = "none"
+                    this.formContainer.style.display = "none"
 
                     rulers.forEach(ruler => ruler.style.display = 'flex')
                 }, 1000)
@@ -109,12 +144,6 @@ class IntroForm {
         })
     }
 
-    generateScene(){
-        this.ucarineSong.loop = true
-        this.ucarineSong.volume = 1
-        this.ucarineSong.play()
-        this.generateForm()
-    }
 }
 
 export{
