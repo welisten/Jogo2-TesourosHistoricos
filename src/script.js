@@ -1,7 +1,9 @@
 import { IntroForm } from './Scenes/Form.js'; 
+import  {LevelScore} from './Scenes/LevelScore.js'
+const levelScoreContainer = document.querySelector('#gameContainer')
 
-const intro = new IntroForm()
-
+const score = new LevelScore(levelScoreContainer, 'Wesley', 76)
+// const intro = new IntroForm()
 const accessibleContainer = document.getElementById('gameAccessibleContainer')
 const gameDisplay = document.getElementById('gameDisplay')
 const gameDisplay_header = document.getElementById('gameDisplay_header')
