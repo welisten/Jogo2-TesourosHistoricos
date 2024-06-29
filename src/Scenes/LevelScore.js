@@ -1,10 +1,21 @@
 class LevelScore{
-    constructor(father, name, time,){
+    constructor(father, name, time, level, game ){
         this.father = father
         this.element = ''
         this.userName = name
-        this.levelTime = time
+        this.userTime = time
+        this.userLevel = level
+        this.game = game
+        this.songVictory = new Audio('./Assets/songs/victory.wav')
+        this.songApplause = new Audio('./Assets/songs/aplause.wav')
+        this.transitionSong = new Audio('./Assets/songs/intro.wav')
         this.generatePainel()
+
+        this.songVictory.loop = true
+        this.songApplause.loop = true
+        this.songVictory.play()
+        this.songApplause.play()
+        
     }
 
     generatePainel(){
@@ -14,13 +25,13 @@ class LevelScore{
         
         const container = document.createElement('div')
         const painelHeader = document.createElement('div')
+        const title = document.createElement('span')
         const painelBody = document.createElement('div')
         const painelFooter = document.createElement('div')
-        const title = document.createElement('span')
 
+        container.classList.add('scoreContainer')
         title.classList.add('scoreTitle')
         title.classList.add('FIT')
-        container.classList.add('scoreContainer')
         painelHeader.classList.add('scoreHeader')
         painelBody.classList.add('scoreBody')
         painelFooter.classList.add('scoreFooter')
@@ -36,8 +47,8 @@ class LevelScore{
         this.fitTextContect('.scoreTitle')
         
         this.generateBody(painelBody)
+        this.generateFooter(painelFooter)
     }
-
     generateBody(father){
         const star1Container = document.createElement('div')
         const star2Container = document.createElement('div')
@@ -46,9 +57,7 @@ class LevelScore{
         const star2 = document.createElement('img')
         const star3 = document.createElement('img')
 
-        star1.setAttribute('src', './Assets/imgs/goldStar.png')
-        star2.setAttribute('src', './Assets/imgs/goldStar.png')
-        star3.setAttribute('src', './Assets/imgs/goldStar.png')
+        this.handleScore(this.userTime, this.userLevel, star1, star2, star3)
 
         star1Container.classList.add('star1')
         star2Container.classList.add('star2')
@@ -62,6 +71,116 @@ class LevelScore{
         father.appendChild(star3Container)
 
     }
+    handleScore(score, level, star1, star2, star3){
+        let userTime = score
+        const factor = Number(level) + 1
+        const maxTime = 100
+        const minTime = maxTime - (factor * 10)
+        
+        if(userTime < minTime){
+            star1.setAttribute('src', './Assets/imgs/goldStar.png')
+            star2.setAttribute('src', './Assets/imgs/goldStar.png')
+            star3.setAttribute('src', './Assets/imgs/goldStar.png')
+        }else if(userTime < (minTime + 10)){
+            star1.setAttribute('src', './Assets/imgs/goldStar.png')
+            star2.setAttribute('src', './Assets/imgs/goldStar.png')
+            star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        } else if(userTime < maxTime){
+            star1.setAttribute('src', './Assets/imgs/goldStar.png')
+            star2.setAttribute('src', './Assets/imgs/stellStar.png')
+            star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        }else{
+            star1.setAttribute('src', './Assets/imgs/stellStar.png')
+            star2.setAttribute('src', './Assets/imgs/stellStar.png')
+            star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        }
+
+        // switch(userTime){
+        //     case userTime < minTime:
+        //         star1.setAttribute('src', './Assets/imgs/goldStar.png')
+        //         star2.setAttribute('src', './Assets/imgs/goldStar.png')
+        //         star3.setAttribute('src', './Assets/imgs/goldStar.png')
+        //         break
+        //     case userTime < (minTime + 10):
+        //         star1.setAttribute('src', './Assets/imgs/goldStar.png')
+        //         star2.setAttribute('src', './Assets/imgs/goldStar.png')
+        //         star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        //         break
+        //     case userTime < maxTime:
+        //         star1.setAttribute('src', './Assets/imgs/goldStar.png')
+        //         star2.setAttribute('src', './Assets/imgs/stellStar.png')
+        //         star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        //         break
+        //     default:
+        //         star1.setAttribute('src', './Assets/imgs/stellStar.png')
+        //         star2.setAttribute('src', './Assets/imgs/stellStar.png')
+        //         star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        //         break
+
+        // }
+        
+    }
+    generateFooter(father){
+        const btnsContainer = document.createElement('div')
+        const gameInfo = document.createElement('div')
+
+        gameInfo.classList.add('footerInfo')
+        const timeInfo = document.createElement('div')
+        const levelInfo = document.createElement('div')
+
+        levelInfo.classList.add('levelInfo')
+        timeInfo.classList.add('timeInfo')
+        
+        levelInfo.innerHTML = `Level <span>${this.userLevel}</span>`
+        timeInfo.innerHTML = `<span>${this.userTime}s</span>`
+
+        const levelImg = document.createElement('img')
+        const clockImg = document.createElement('img')
+
+        levelImg.setAttribute('src', './Assets/imgs/level.png')
+        clockImg.setAttribute('src', './Assets/imgs/clock.png')
+        
+        levelInfo.appendChild(levelImg)
+        timeInfo.appendChild(clockImg)
+
+        gameInfo.appendChild(levelInfo)
+        gameInfo.appendChild(timeInfo)
+
+        btnsContainer.classList.add('btnsContainer')
+        const btnReplay = document.createElement('button')
+        const btnNext = document.createElement('button')
+        
+        btnReplay.classList.add('btnReplay')
+        btnReplay.classList.add('fa-solid')
+        btnReplay.classList.add('fa-repeat')
+
+        btnNext.classList.add('btnNext')
+        btnNext.classList.add('fa-solid')
+        btnNext.classList.add('fa-forward')
+
+        btnsContainer.appendChild(btnReplay)
+        btnsContainer.appendChild(btnNext)
+  
+        father.appendChild(gameInfo)
+        father.appendChild(btnsContainer)
+        btnReplay.addEventListener('click', (e) => {
+            console.log(this.songApplause, this.songVictory)
+            // e.preventDefault()
+  
+            this.songVictory.pause()
+            this.songApplause.pause()
+
+            const gameBoard = document.getElementById('gameBoard')
+            gameBoard.style.display = "grid"
+            this.element.style.display = 'none'
+            
+            this.game.resetGame()
+            this.game.setGameDisplay()
+            this.transitionSong.play()
+            // this.game.startGame()
+            // this.destroyScore()
+        })
+    }
     fitTextContect(identificador){
         const elem = document.querySelector(identificador)
         const parent = elem.parentNode
@@ -72,34 +191,13 @@ class LevelScore{
         if((elem.offsetHeight * 1.2) > (parentHeight) || (elem.offsetWidth * 1.2) > parentWidth){
             $(document).ready(function(){
                 $(identificador).fitText(1.5)
-                console.log('confere')
             })
-        }else console.log('não confere');
+        }
     }
-    // createHeader(father){
-    //     const SVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    //     const PATH = document.createElementNS('http://www.w3.org/2000/svg', 'path')
-    //     const TEXT = document.createElementNS('http://www.w3.org/2000/svg', 'text')
-    //     const TEXTPATH = document.createElementNS('http://www.w3.org/2000/svg', 'textPath')
-
-    //     SVG.setAttribute('width','100%')
-    //     SVG.setAttribute('height','100%')
-        
-    //     PATH.setAttribute('id','curve')
-    //     PATH.setAttribute('d',"m10 70 c 52 -30, 104 -30, 110 -30 s 142 -10, 210 30")
-    //     PATH.setAttribute('fill','transparent')
-    //     PATH.setAttribute('stroke','#fff')
-
-    //     TEXT.setAttribute('class', 'curved-text')
-
-    //     TEXTPATH.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#curve')
-
-    //     TEXT.appendChild(TEXTPATH)
-    //     SVG.appendChild(PATH)
-    //     SVG.appendChild(TEXT)
-    //     father.appendChild(SVG)
-
-    // }
+    destroyScore(){
+        this.element.style.display = 'none'
+        this.father.remove(this.element)
+    }
 }
 
 export{

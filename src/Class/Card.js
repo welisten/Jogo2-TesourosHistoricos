@@ -9,18 +9,21 @@ class Card {
         this.isMatched = false;
         this.incorrectMatch= false
     }
-
     flip() {
         this.isFlipped = !this.isFlipped;
     }
-
     match() {
         this.isMatched = true;
     }
-
     fail() {
         this.incorrectMatch = !this.incorrectMatch
     }
+    restore() {  //coloca o user em seu estado inicial
+        this.isFlipped = false
+        this.isMatched = false
+        this.incorrectMatch = false
+    }
+    // toggleLight -> é mais facil o jogo ficar responsavel por alternar a cor das cartas doque atribuir essa junção para carta separadamenta
 }
 
 export {

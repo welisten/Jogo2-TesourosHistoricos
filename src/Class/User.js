@@ -1,25 +1,36 @@
 class User {
     constructor(nome){
         this.name = nome
-        this.time = 0
-        this.treasure = 0
-        this.clock = null
+        this.treasures = 0
+        this.level = 0
     }
-
+    // os getter e setter foram construidos para o meomento onde atributos serão privados
     getNome(){
         return this.nome
     }
-
-    increaseTreasure(){
-        this.treasure++
+    getTreasures(){
+        return this.treasures
+    }
+    getLevel(){
+        return this.nome
     }
 
-    startClock(){
-        this.clock = setInterval(() => this.tempo++, 1000)
+    setName(name){
+        this.name = name
+    }
+    setLevel(level){
+        this.level = level
+    }
+    
+    updateTreasures(){
+        this.treasures++
+    }
+    updateUser(){
+        this.level++
     }
 
-    killClock(){
-        clearInterval(this.clock)
+    resetUserGame(){
+        this.treasures -= 8
     }
 }
 

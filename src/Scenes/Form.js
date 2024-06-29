@@ -79,14 +79,12 @@ class IntroForm {
         typewriter()
         }, 2000)
     }
-
     generateAside(){
         const gameBoard_aside = document.getElementById('gameBoard_aside')
         this.gameDisplay = new GameDisplay(gameBoard_aside)
         this.gameAcessibleDisplay = new GameAcessibleDisplay(gameBoard_aside)
 
     }
-
     toggleLight(){
         const form = document.querySelector('.introForm')
         if(this.lightBtn.classList.contains('active')){
@@ -127,15 +125,8 @@ class IntroForm {
                 introForm.style.opacity = 0
                 setTimeout(() => {
                     this.game = new MemoryGame(16, nameInput.value, this.gameDisplay)
-                    this.game.startGame()
-                    
-                    const gameBoard = document.getElementById('gameBoard')
-                    const rulers = document.querySelectorAll('.ruler')
-                    
-                    gameBoard.style.display     = 'grid'
                     this.formContainer.style.display = "none"
-
-                    rulers.forEach(ruler => ruler.style.display = 'flex')
+                    this.game.startGame()
                 }, 1000)
 
             }else{

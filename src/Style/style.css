@@ -4,17 +4,20 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* transition: all 1s ease; */
+    transition: all 1s ease;
 }
 :root{  
-    --btn-color: rgb(5, 109, 179);
-    --glow-color: rgb(191, 219, 255);
-    --glow-spread-color: rgba(29, 127, 255, 0.781);
+    --btn-color: #056db3;
+    --glow-color: #bfdbff;
+    --glow-spread-color: #1d7fffc7;
 
 
     --control-btn-color: #013b6b;
     --body-color-dark: #070707;
     --body-color-light: #efefef;
+
+    --white-ice-A9f: #efefef9f;
+    --blue-dark-theme: #056db3;
 }
 html{
     font-size: 62.5%;
@@ -40,7 +43,7 @@ h1 {
     height: 100%;
     border: 5px solid #3498db;
     border-radius: 15px;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -158,7 +161,7 @@ h1 {
     top: 50%;
     height: 40%;
     display: flex;
-    display: none;
+    /* display: none; */
     flex-direction: column;
     justify-content: space-around;
     transform: translateY(-50%);
@@ -234,7 +237,7 @@ h1 {
     left: 5%;
     width: 90%;
     height: 1px;
-    border-bottom: 1px solid #ffffff80;
+    border-bottom: 1px solid var(--white-ice-A9f);
 }
 #gameDisplay_header{
     position: relative;
@@ -265,8 +268,8 @@ h1 {
 }
 #gameDisplay_header .clock .fa-clock{
     position: absolute;
-    font-size: 40%;
-    color: #ffffff56;
+    font-size: 75%;
+    color: var(--white-ice-A9f);
     top: 1vh;
     right: 1vh;
 }
@@ -292,7 +295,7 @@ h1 {
     width: 100%;
     border-radius: 15px;
     font-size: 1.8rem;
-    font-weight: 200;
+    font-weight: inherit;
     line-height: 2rem;
     display: flex;
     text-align: center;
@@ -305,7 +308,7 @@ h1 {
     padding-bottom: 5px;
     border-radius: 15px;
     font-size: 2rem;
-    font-weight: 500;
+    font-weight:inherit;
     line-height: 2rem;
     text-transform: uppercase;
     display: flex;
@@ -328,6 +331,7 @@ h1 {
     align-content: center;
     font-size: 2.5rem;
     font-weight: inherit;
+    text-transform: capitalize;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -531,9 +535,7 @@ h1 {
     background-color: var(--body-color-light);
     background-color: #ffffff23;
     backdrop-filter: blur(20px);
-    border-radius: 3vh 3vh 0 0;
-
-
+    border-radius: 3vh ;
 }
 
 #levelScore .scoreHeader{
@@ -552,8 +554,7 @@ h1 {
     color: #fff;
     transform: scale(1);
     animation: titlePulse 1s ease-in-out 0s infinite normal forwards;
-    /* border: 1px solid ; */
-}
+}   
 
 #levelScore .scoreBody{
     position: relative;
@@ -561,53 +562,155 @@ h1 {
     width: 100%;
     border-left: 1px solid #ffffff56 ;
     border-right: 1px solid #ffffff56 ;
-    /* border: 1px solid white; */
 }
 #levelScore .scoreBody .star1{
     position: absolute;
-    top: 10%;
-    left: 10%;
-    display: block;
+    top: 47%;
+    left: 29%;
     height: 80%;
-    transform: rotate(-15deg);
-    /* border: 1px solid green; */
+    /* transform:  */
+    transform: rotate(-15deg) translate(-50%, -50%);
     background-size: cover;
 }
 #levelScore .scoreBody .star2{
     position: absolute;
-    top: -10%;
-    left: 33%;
+    top: 30%;
+    left: 50%;
     display: block;
     height: 80%;
-    /* border: 1px solid blue; */
     background-size: cover;
+    transform: translate(-50%, -50%);
     z-index: 5;
 }
 #levelScore .scoreBody .star3{
     position: absolute;
-    top: 10%;
-    right: 10%;
+    top: 67%;
+    left: 69.5%;
     display: block;
     height: 80%;
-    /* border: 1px solid red; */
-    transform: rotate(15deg);
+    transform: rotate(15deg) translate(-50%, -50%);
     background-size: cover;
 }
-#levelScore .scoreBody .star1 img{
-    height: 100%;
-}
-#levelScore .scoreBody .star2 img{
-    height: 100%;
-}
-#levelScore .scoreBody .star3 img{
+#levelScore .scoreBody img{
     height: 100%;
 }
 
 #levelScore .scoreFooter{
     height: 25%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
     background-color: #67c2ff;
     border-radius: 0 0 15px 15px;
+}
+#levelScore .scoreFooter .footerInfo{
+    height: 70%;
+    width: 100%;
+    /* margin-left: 4%; */
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    font-size: 3rem;
+    color: #FFFFFF;
+} 
+.footerInfo img{
+    height: 100%;
+    display: inline-block;
+} 
+.footerInfo .levelInfo{
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    position: relative;
+    justify-content: baseline;
+
+} 
+.footerInfo .levelInfo span{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top:20% ;
+    left: 50%;
+    height: 100%;
+    font-size: 3.5rem;
+    z-index: 5;
+} 
+.footerInfo .levelInfo img{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 35%;
+    left: 50%;
+    /* border: 1px solid pink; */
+    height: 70%;
+
+} 
+
+.footerInfo .timeInfo{
+    position: relative;
+    height: 100%;
+    width: 20%;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 4rem;
+        /* margin: 0 5%; */
+
+}
+.footerInfo .timeInfo span{
+
+    position:absolute;
+    font-size: 3rem;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 75%;
+    z-index: 2;
+} 
+.footerInfo .timeInfo img{
+    position:absolute;
+    transform: translate(-50%, -50%);
+    height: 90%;
+    top: 25%;
+    left: 50%;
+} 
+/* .footerInfo .treasureInfo{
+    position: relative;
+    height: 100%;
+    width: 20%
+}  
+.footerInfo .treasureInfo span{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 25%;
+    top: 25%;
+    /* border: 1px solidw; */
+/* }   */
+/* .footerInfo .treasureInfo img{ */
+    /* border: 1px solid yellow; */
+    /* height: 90%; */ */
+/* }   */
+#levelScore .scoreFooter .btnsContainer{
+    height: 50%;
+    width: 100%;
+    position: relative;
+}
+#levelScore .scoreFooter .btnsContainer button{
+    position: absolute;
+    background-image: linear-gradient(to right, #161aff, #3398db);
+    border: none;
+    border-radius: 50%;
+    height: 6vh;
+    width: 6vh;
+    font-size: 3rem;
+    color: #fff;
+    cursor: pointer;
+}
+.btnNext{
+    bottom: 1vh;
+    right: 1vh;
+}
+.btnReplay{
+    bottom: 1vh;
+    left: 1vh;
 }
 
 @keyframes formFadeIn{

@@ -1,25 +1,47 @@
 import  { Card }  from '../Class/Card.js';
 import  { User }  from '../Class/User.js';
 import { valuesObj } from "../Consts/Values.js";
-// import  { DisplayHeader } from '../Class/DisplayHeader.js'
+import  {LevelScore} from './LevelScore.js'
+
 
 class MemoryGame {
     constructor(size, user_name, gameDisplay) {
         this.container = document.querySelector('#gameContainer')
+        
         this.size = size;
         this.cards = [];
         this.flippedCards = [];
-        this.lastFlippedCard = undefined
         this.user = new User(user_name)
         this.gameDisplay = gameDisplay
         this.song = undefined
         this.clock = undefined
-        this.level = 0
         this.generateCards();
+        this.setGameDisplay()
+        
+        this.gameDisplay.bar.setBarName(this.user.name.split(' ')[0])
+        this.user.updateUser()
+        this.gameDisplay.user = this.user
+        this.gameDisplay.bar.updateBar()
+
+        const board = document.createElement('div');
+        board.classList.add('gameBoard');
+        board.setAttribute('id', 'gameBoard')
+        this.container.appendChild(board)
     }
+    setGameDisplay(){
+        const board = document.getElementById('gameBoard');
+        const rulers = document.querySelectorAll('.ruler')
+        const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
 
-
+        // gameDisplay_header.style.height = '100%'
+        
+        rulers.forEach(ruler => ruler.style.display = 'flex')
+        board.style.display = 'grid'
+        board.style.height = `${containerWidth}px` 
+        board.style.width = `${containerWidth}px` 
+    }
     generateCards() {
+
         const values = []
         valuesObj.forEach( value => values.push([value.nome, value.URL, value.description]))
         
@@ -53,7 +75,6 @@ class MemoryGame {
             }
         }
     }
-
     flipCard(index) {
         const card = this.cards[index];
         const selectSong = new Audio('./Assets/songs/select.wav')
@@ -62,8 +83,8 @@ class MemoryGame {
         
         
         this.gameDisplay.header.setCardsInfo(card.value, `${card.location.collumn}${card.location.row}`)
-        this.gameDisplay.header.updateInfo()
-        this.gameDisplay.body.updateImg(card.URL) 
+        this.gameDisplay.header.updateInfoContainer()
+        this.gameDisplay.body.updateDisplayImg(card.URL) 
         
         this.gameDisplay.footer.updateFooterText(card.description, this.fitTextContect)
         
@@ -77,21 +98,19 @@ class MemoryGame {
             this.checkForMatch();
         }
     }
-
     checkForMatch() {
         const [card1, card2] = this.flippedCards;
         const successSong = new Audio('./Assets/songs/success.mp3')
         const failSong = new Audio('./Assets/songs/fail.mp3')
-        const victorySong = new Audio('./Assets/songs/victory.wav')
-        const aplauseSong = new Audio('./Assets/songs/aplause.wav')
+
         const accessibleContainer = document.querySelector('#gameAccessibleContainer')
 
         if (card1.value === card2.value) {
             card1.match();
             card2.match();
             setTimeout(() => successSong.play(), 500)
-            this.user.treasure++
-            this.gameDisplay.bar.updateTreasures(this.user.treasure)
+            this.user.treasures++
+            this.gameDisplay.bar.updateBar()
         } else {
             card1.fail()
             card2.fail()
@@ -105,27 +124,23 @@ class MemoryGame {
                 this.updateBoard();
             }, 1500);
         }
-        if(this.user.treasure == 8){
+        if(this.user.treasures == 8){
             this.song.pause()
-            
-            victorySong.play()
-            victorySong.loop = true
-            
-            aplauseSong.play()
-            aplauseSong.loop = true
-
             clearInterval(this.clock)
+            const father = document.querySelector('#gameContainer')
+            const gameBoard = document.getElementById('gameBoard')
+            gameBoard.style.display = "none"
+            new LevelScore(father, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this)
+            this.gameDisplay.handleWin()
         }
         this.flippedCards = [];
         this.updateBoard();
     }
-
     updateBoard() {
-        const board = document.getElementById('gameBoard');
         const accessibleContainer = document.querySelector('#gameAccessibleContainer')
-        
+        const board = document.getElementById('gameBoard');
+
         board.innerHTML = '';
-        
         this.cards.forEach((card, index) => {
             const cardElement = document.createElement('div');
             const cardImage =  document.createElement('img')
@@ -143,46 +158,32 @@ class MemoryGame {
                 this.flipCard(index)
             });
             board.appendChild(cardElement);
-            if(this.user.treasure < 8)accessibleContainer.innerHTML = `User: ${this.user.name}\nTreasure: ${this.user.treasure}`
+            if(this.user.treasures < 8)accessibleContainer.innerHTML = `User: ${this.user.name}\nTreasure: ${this.user.treasures}`
         });
         
     }
-    fitTextContect(identificador){
+    fitTextContect(identificador){  // AQUI NÃO É O MELHOR LUGAR PARA ESSA FUNÇÃO
         const elem = document.querySelector(identificador)
         const parent = elem.parentNode
         const parentHeight = parent.clientHeight
         const fontsize = elem.style.fontSize == '2rem' ? '2rem' : elem.style.fontSize
+        
         elem.style.transition = 'none'
+        
         if(elem.scrollHeight > (parentHeight - 20) ){
             $(document).ready(function(){
-                console.log(elem.scrollHeight,(parentHeight - 20), elem)
-                console.log('confere')
                 $(identificador).fitText(2)
             })
         }else{
             elem.style.fontSize = fontsize
-            console.log(elem.scrollHeight,(parentHeight - 20), elem)
-            console.log('não confere')
-
         }
     }
-    startClock(){
-            this.clock = setInterval(()=>{
-                this.gameDisplay.header.increaseTimer(1)
-                this.gameDisplay.header.updateClock()
-            }, 1000)
-    }
-
     startGame() {
-        // console.log(JQuery)
-        this.level = 1
         this.updateBoard();
         this.gameDisplay.header.setCardsInfo('', '')
-        this.gameDisplay.header.setTimer(0)
+        this.gameDisplay.header.startClock();
+        this.gameDisplay.bar.updateBar()
         this.gameDisplay.update()
-        this.gameDisplay.bar.updateLevel(this.level)
-        this.gameDisplay.bar.updateName(this.user.name.split(' ')[0])
-        this.startClock();
 
         this.song = new Audio('./Assets/songs/main.wav')
         this.song.loop = true
@@ -190,6 +191,19 @@ class MemoryGame {
         setTimeout(() => {
             this.song.play()
         }, 1500)
+    }
+    resetGame(){
+        const board = document.getElementById('gameBoard');
+        board.remove()
+        // this.cards.forEach(card => card.restore())
+        // document.querySelectorAll('.card').forEach((card => {
+        //     card.classList.remove('matched')
+        // }))
+        this.cards = []
+        this.flippedCards = [];
+        this.user.resetUserGame()
+        this.generateCards()
+        this.startGame()
     }
 }
 
