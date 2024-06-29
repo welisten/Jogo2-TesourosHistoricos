@@ -23,7 +23,7 @@ class Card {
         this.isMatched = false
         this.incorrectMatch = false
     }
-    // toggleLight -> é mais facil o jogo ficar responsavel por alternar a cor das cartas doque atribuir essa junção para carta separadamenta
+    // toggleLight -> é mais facil o jogo ficar responsavel por alternar a cor das cartas do que atribuir essa função para cada carta separadamenta
 }
 
 export {

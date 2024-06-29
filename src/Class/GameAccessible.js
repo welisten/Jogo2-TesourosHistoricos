@@ -1,10 +1,11 @@
+import { colors } from "../Consts/Colors.js"
 class GameAcessibleDisplay{
     constructor(father){
         this.father = father
         this.element = document.getElementById('gameAccessibleContainer')
-        this.toggleBtn = document.querySelector('.libras_btn')
+        this.librasBtn = document.querySelector('.libras_btn')
+        this.lightModeBtn = document.querySelector('.lightMode_btn')
     }
-
     toggleDisplay(){
         if(this.toggleBtn.classList.contains('active')){
                 this.element.style.display = 'block'
@@ -23,9 +24,18 @@ class GameAcessibleDisplay{
             }, 1000)
         }   
     }
-
     toggleLight(){
-        
+        if(this.lightModeBtn.classList.contains('.active')){
+
+        }else{
+
+        }
+    }
+    updateAccessibleContainer(){
+
+    }
+    resetAccessibleContainer(){
+
     }
 }
 
