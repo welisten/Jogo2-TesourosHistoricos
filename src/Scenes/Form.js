@@ -1,16 +1,16 @@
 import  { MemoryGame } from './Game.js';
 import  { GameDisplay } from '../Class/GameDisplay.js'
 import  { GameAcessibleDisplay} from '../Class/GameAccessible.js'
+import  { colors } from '../Consts/colors.js';
 
 class IntroForm {
     constructor(){
+        this.element = ''                                                       // SCENE (MAIN CONTAINER)
+        this.gameDisplay   = 'undefined'                                        // ASIDE GAME DISPLAY
+        this.gameAcessibleDisplay   = 'undefined'                               // ASIDE GAME ACCESSIBLE CONTAINER
         this.ucarineSong    = new Audio('./Assets/songs/ucarine.wav')
         this.transitionSong = new Audio('./Assets/songs/intro.wav')
-        this.lightBtn =  document.querySelector('.lightMode_btn')
-        this.gameDisplay   = 'undefined'
-        this.gameAcessibleDisplay   = 'undefined'
-        this.game = 'undefined'
-        this.formContainer = ''
+        this.lightModeBtn =  document.querySelector('.lightMode_btn')
         this.generateScene()
     }
     generateScene(){
@@ -22,80 +22,85 @@ class IntroForm {
         this.generateAside()
     }
     generateForm(){
-        this.formContainer = document.getElementById('introFormContainer')
-
+        this.element = document.getElementById('introFormContainer')            //CRIA OS ELEMENTOS
+        // CRIAR ELEMENTO FORMULARIO EM FUTURA REFATORAÇÃO
+        // LEVAR EM CONSIDERAÇÃO O USO OU NÃO USO DE UM BANCO DE DADOS
         const introForm = document.createElement('form')
         const formTitle = document.createElement('h2')
         const formBody = document.createElement('div')
-        const nameInput = document.createElement('input')
         const nameLabel = document.createElement('label')
+        const nameInput = document.createElement('input')
         const startBtn  = document.createElement('button')
 
-        introForm.classList.add('introForm')
+        introForm.classList.add('introForm')                                    // CONFIGURA OS ATRIBUTOS
         formTitle.classList.add('formTitle')
         nameInput.classList.add('nameInput')
         nameLabel.classList.add('nameLabel')
         formBody.classList.add('formBody')
         startBtn.classList.add('startBtn')
-        
-        formTitle.innerText = ''
         nameLabel.setAttribute('for', 'user_name') 
-        nameLabel.textContent =  'Nome :'
+        
         nameLabel.title = "Digite seu nome"
         nameInput.type = 'text'
         nameInput.name = 'user_name'
         nameInput.placeholder = 'Digite seu nome'
         nameInput.id = 'user_name'
+        
+        formTitle.textContent = ''
+        nameLabel.textContent =  'Nome :'
         startBtn.textContent = 'iniciar'
 
-        formBody.appendChild(nameLabel)
+        formBody.appendChild(nameLabel)                                         //APPEND OS ELEMENTOS
         formBody.appendChild(nameInput)
         formBody.appendChild(startBtn)
         introForm.appendChild(formTitle)
         introForm.appendChild(formBody)
-        this.formContainer.appendChild(introForm)
+        this.element.appendChild(introForm)
         
         this.handleElements()
+        this.typewriter('Ola! Vamos começar digitando o seu Nome.', formTitle)
 
-        let aux = 0
-        let title = 'Ola! Vamos começar digitando o seu Nome.'
-        let writerDelay = 50
-        
-        setTimeout(() => {
-            function typewriter(){
-                if(aux >= title.length){
-                    return
-                }
-
-                let currentChar = title[aux]
-                formTitle.textContent += currentChar 
-                aux++
-                
-                let delay = writerDelay
-                if(currentChar == '.' || currentChar == '!' || currentChar == '?' || currentChar == ',')
-                    delay = 500
-                setTimeout(typewriter, delay)
-            }
-        typewriter()
-        }, 2000)
     }
     generateAside(){
         const gameBoard_aside = document.getElementById('gameBoard_aside')
+        
         this.gameDisplay = new GameDisplay(gameBoard_aside)
         this.gameAcessibleDisplay = new GameAcessibleDisplay(gameBoard_aside)
-
+    }
+    typewriter(text, container){
+        let node = 0
+        let titleArr = text
+        let writerDelay = 50
+        
+        setTimeout(() => {
+            function tWriter(){//RECURSIVIDADE
+                if(node >= titleArr.length){//PONTO DE PARADA
+                    return
+                }
+                                                
+                let currentChar = titleArr[node]            // EXECUÇÃO
+                container.textContent += currentChar 
+                node++                                   //ATUALIZAÇÃO DO NÓ
+                
+                let delay = writerDelay                 //ATUALIZAÇÃO DO PARAMETRO
+                if(currentChar == '.' || currentChar == '!' || currentChar == '?' || currentChar == ',')
+                    delay = 500
+                setTimeout(tWriter, delay)           //CHAMADA RECURSIVA
+            }
+        tWriter()
+        }, 2000)
     }
     toggleLight(){
         const form = document.querySelector('.introForm')
-        if(this.lightBtn.classList.contains('active')){
-            this.formContainer.style.backgroundColor =  `black`
-            form.style.backgroundColor =  `#ffffff23`
-            form.style.boxShadow = '0 0 .5em rgba(29, 127, 255, 0.781)'
+        if(this.lightModeBtn.classList.contains('active')){
+            this.element.style.backgroundColor =  colors.black
+            form.style.backgroundColor =  colors.transparent_a23
+            form.style.boxShadow = `0 0 .5em ${colors.blue_serius_ac7}`
         }
         else
         {
-            this.formContainer.style.backgroundColor = `white`
-            form.style.backgroundColor = `#3498db`
+            this.element.style.backgroundColor = colors.white
+            form.style.backgroundColor = colors.blue_baby
             form.style.boxShadow ='none'
         }
     }
@@ -107,36 +112,34 @@ class IntroForm {
         
         nameInput.addEventListener('focus', ()=>{
             nameLabel.style.transform = 'translateY(0)'
-            nameLabel.style.color = 'white'
+            nameLabel.style.color = colors.white
         })
-        
         nameInput.addEventListener('blur', ()=>{
-            if(nameInput.value == ''){
+            if(!nameInput.value){
                 nameLabel.style.transform = 'translateY(4.8vh)'
-                nameLabel.style.color = 'black'
+                nameLabel.style.color = colors.black
             }
         })
         
         startBtn.addEventListener('click', (e) => {
             e.preventDefault()
-            if(nameInput.value != ''){
+            if(nameInput.value){
                 this.ucarineSong.pause()
                 this.transitionSong.play()
                 introForm.style.opacity = 0
+                
                 setTimeout(() => {
-                    this.game = new MemoryGame(16, nameInput.value, this.gameDisplay)
-                    this.formContainer.style.display = "none"
-                    this.game.startGame()
+                    const game = new MemoryGame(16, nameInput.value, this.gameDisplay)
+                    this.element.style.display = "none"
+                    game.startGame()
+                    this.element.remove()
                 }, 1000)
-
             }else{
                 alert('Digite um nome válido')
             }
         })
     }
-
 }
-
 export{
     IntroForm
 }

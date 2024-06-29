@@ -7,7 +7,9 @@ const colors = {
     blue_dark_theme: '#056db3',
     blue_baby: '#3498db',
     blue_baby_a80: '#3498db80',
+    blue_serius_ac7: '#1d7fffc7', // form shadow
     transparent_a10: '#ffffff10',
+    transparent_a23: '#ffffff23', //form background
 
 }
 

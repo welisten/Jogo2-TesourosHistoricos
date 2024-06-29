@@ -38,7 +38,6 @@ class GameAcessibleDisplay{
 
     }
 }
-
 export {
     GameAcessibleDisplay
 }
