@@ -87,7 +87,7 @@ class MemoryGame {
         const [card1, card2] = this.flippedCards;
         const successSong = new Audio('./Assets/songs/success.mp3')
         const failSong = new Audio('./Assets/songs/fail.mp3')
-
+        console.log(this.user.treasures, this.user.level)
         if (card1.value === card2.value) {
             card1.match();
             card2.match();
@@ -109,14 +109,11 @@ class MemoryGame {
             }, delay);
         }
 
-        if(this.user.treasures == (this.user.treasures / this.user.level)){
-            const father = document.querySelector('#gameContainer')
-            const gameBoard = document.getElementById('gameBoard')
-
+        if(this.user.treasures == ( this.size / 2 / this.user.level)){
             this.song.pause()
-            gameBoard.style.display = "none"
+            document.getElementById('gameBoard').style.display = "none"
 
-            new LevelScore(father, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this)
+            new LevelScore(this.mainContainer, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this)
             this.gameDisplay.handleWin()
         }
 

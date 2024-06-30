@@ -6,33 +6,33 @@ class LevelScore{
         this.userTime = time
         this.userLevel = level
         this.game = game
+
         this.songVictory = new Audio('./Assets/songs/victory.wav')
         this.songApplause = new Audio('./Assets/songs/aplause.wav')
-        this.transitionSong = new Audio('./Assets/songs/intro.wav')
-        this.generatePainel()
-
+        
         this.songVictory.loop = true
         this.songApplause.loop = true
         this.songVictory.play()
         this.songApplause.play()
+        this.generatePainel()
         
     }
 
-    generatePainel(){
-        this.element = document.createElement('div')
-        this.element.setAttribute('id', 'levelScore')
-        this.element.classList.add('levelScore')
-        
+    generatePainel(){                   //CRIA OS ELEMENTOS DOM DO PAINEL DO SCORE (INCLUINDO O HEADER)
         const container = document.createElement('div')
         const painelHeader = document.createElement('div')
         const title = document.createElement('span')
         const painelBody = document.createElement('div')
         const painelFooter = document.createElement('div')
-
+        
+        this.element = document.createElement('div')
+        this.element.setAttribute('id', 'levelScore')
+        this.element.classList.add('levelScore')
+        
         container.classList.add('scoreContainer')
+        painelHeader.classList.add('scoreHeader')
         title.classList.add('scoreTitle')
         title.classList.add('FIT')
-        painelHeader.classList.add('scoreHeader')
         painelBody.classList.add('scoreBody')
         painelFooter.classList.add('scoreFooter')
 
@@ -49,7 +49,7 @@ class LevelScore{
         this.generateBody(painelBody)
         this.generateFooter(painelFooter)
     }
-    generateBody(father){
+    generateBody(father){               // PREENCHE OS ELEMENTOS DO CORPO DO PAINEL
         const star1Container = document.createElement('div')
         const star2Container = document.createElement('div')
         const star3Container = document.createElement('div')
@@ -71,56 +71,7 @@ class LevelScore{
         father.appendChild(star3Container)
 
     }
-    handleScore(score, level, star1, star2, star3){
-        let userTime = score
-        const factor = Number(level) + 1
-        const maxTime = 100
-        const minTime = maxTime - (factor * 10)
-        
-        if(userTime < minTime){
-            star1.setAttribute('src', './Assets/imgs/goldStar.png')
-            star2.setAttribute('src', './Assets/imgs/goldStar.png')
-            star3.setAttribute('src', './Assets/imgs/goldStar.png')
-        }else if(userTime < (minTime + 10)){
-            star1.setAttribute('src', './Assets/imgs/goldStar.png')
-            star2.setAttribute('src', './Assets/imgs/goldStar.png')
-            star3.setAttribute('src', './Assets/imgs/stellStar.png')
-        } else if(userTime < maxTime){
-            star1.setAttribute('src', './Assets/imgs/goldStar.png')
-            star2.setAttribute('src', './Assets/imgs/stellStar.png')
-            star3.setAttribute('src', './Assets/imgs/stellStar.png')
-        }else{
-            star1.setAttribute('src', './Assets/imgs/stellStar.png')
-            star2.setAttribute('src', './Assets/imgs/stellStar.png')
-            star3.setAttribute('src', './Assets/imgs/stellStar.png')
-        }
-
-        // switch(userTime){
-        //     case userTime < minTime:
-        //         star1.setAttribute('src', './Assets/imgs/goldStar.png')
-        //         star2.setAttribute('src', './Assets/imgs/goldStar.png')
-        //         star3.setAttribute('src', './Assets/imgs/goldStar.png')
-        //         break
-        //     case userTime < (minTime + 10):
-        //         star1.setAttribute('src', './Assets/imgs/goldStar.png')
-        //         star2.setAttribute('src', './Assets/imgs/goldStar.png')
-        //         star3.setAttribute('src', './Assets/imgs/stellStar.png')
-        //         break
-        //     case userTime < maxTime:
-        //         star1.setAttribute('src', './Assets/imgs/goldStar.png')
-        //         star2.setAttribute('src', './Assets/imgs/stellStar.png')
-        //         star3.setAttribute('src', './Assets/imgs/stellStar.png')
-        //         break
-        //     default:
-        //         star1.setAttribute('src', './Assets/imgs/stellStar.png')
-        //         star2.setAttribute('src', './Assets/imgs/stellStar.png')
-        //         star3.setAttribute('src', './Assets/imgs/stellStar.png')
-        //         break
-
-        // }
-        
-    }
-    generateFooter(father){
+    generateFooter(father){             // PREENCHE OS ELEMENTOS DO RODAPÉ DO PAINEL
         const btnsContainer = document.createElement('div')
         const gameInfo = document.createElement('div')
 
@@ -164,25 +115,46 @@ class LevelScore{
         father.appendChild(gameInfo)
         father.appendChild(btnsContainer)
         btnReplay.addEventListener('click', (e) => {
-            console.log(this.songApplause, this.songVictory)
-            // e.preventDefault()
-  
             this.songVictory.pause()
             this.songApplause.pause()
-
+        
+            const transitionSong = new Audio('./Assets/songs/intro.wav') 
             const gameBoard = document.getElementById('gameBoard')
+            
             gameBoard.style.display = "grid"
             this.element.style.display = 'none'
             
-            this.game.resetGame()
+            this.game.replayGame()
             this.game.setGameDisplay()
-            
-            this.transitionSong.play()
-            // this.game.startGame()
-            // this.destroyScore()
+
+            transitionSong.play()
         })
     }
-    fitTextContect(identificador){
+    handleScore(time, level, star1, star2, star3){ //DEFINE AS ESTRELAS NO CORPO DO PAINEL
+        const userTime = time
+        const factor = Number(level) + 1
+        const maxTime = 100
+        const minTime = maxTime - (10 * factor)
+        
+        if(userTime < minTime){
+            star1.setAttribute('src', './Assets/imgs/goldStar.png')
+            star2.setAttribute('src', './Assets/imgs/goldStar.png')
+            star3.setAttribute('src', './Assets/imgs/goldStar.png')
+        }else if(userTime < (minTime + 10)){
+            star1.setAttribute('src', './Assets/imgs/goldStar.png')
+            star2.setAttribute('src', './Assets/imgs/goldStar.png')
+            star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        } else if(userTime < maxTime){
+            star1.setAttribute('src', './Assets/imgs/goldStar.png')
+            star2.setAttribute('src', './Assets/imgs/stellStar.png')
+            star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        }else{
+            star1.setAttribute('src', './Assets/imgs/stellStar.png')
+            star2.setAttribute('src', './Assets/imgs/stellStar.png')
+            star3.setAttribute('src', './Assets/imgs/stellStar.png')
+        }
+    }
+    fitTextContect(identificador){ // IDENTIFICA OVERFLOW DE TEXTO EM RELAÇÃO AO SEU PAI E CORRIGE TAMANHO DA FONTE
         const elem = document.querySelector(identificador)
         const parent = elem.parentNode
         const parentHeight = parent.offsetHeight
@@ -195,7 +167,7 @@ class LevelScore{
             })
         }
     }
-    destroyScore(){
+    destroyScore(){ // ELIMINA ELEMENTO E SEUS FILHOS
         this.element.style.display = 'none'
         this.father.remove(this.element)
     }
