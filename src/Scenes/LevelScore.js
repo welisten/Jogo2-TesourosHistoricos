@@ -176,6 +176,7 @@ class LevelScore{
             
             this.game.resetGame()
             this.game.setGameDisplay()
+            
             this.transitionSong.play()
             // this.game.startGame()
             // this.destroyScore()

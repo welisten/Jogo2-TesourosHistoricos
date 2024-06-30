@@ -29,7 +29,7 @@ class User {
         this.level++
     }
 
-    resetUserGame(){
+    replayUserGame(){
         this.treasures -= 8
     }
 }
