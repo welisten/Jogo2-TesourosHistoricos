@@ -1,22 +1,25 @@
 import  { MemoryGame } from './Game.js';
 import  { GameDisplay } from '../Class/GameDisplay.js'
 import  { GameAcessibleDisplay} from '../Class/GameAccessible.js'
-import  { colors } from '../Consts/colors.js';
+import  { colors } from '../Consts/Colors.js';
 
 class IntroForm {
     constructor(){
         this.element = ''                                                       // SCENE (MAIN CONTAINER)
         this.gameDisplay   = 'undefined'                                        // ASIDE GAME DISPLAY
-        this.gameAcessibleDisplay   = 'undefined'                               // ASIDE GAME ACCESSIBLE CONTAINER
-        this.ucarineSong    = new Audio('./Assets/songs/ucarine.wav')
-        this.transitionSong = new Audio('./Assets/songs/intro.wav')
+        this.gameAcessibleDisplay   = 'undefined' 
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)()                             // ASIDE GAME ACCESSIBLE CONTAINER
+        this.ucarineSong    = gameAssets['ucarine']
+        this.transitionSong = gameAssets['transition']
+        this.currentAudio = null
         this.lightModeBtn =  document.querySelector('.lightMode_btn')
         this.generateScene()
+
+        
     }
+
     generateScene(){
-        this.ucarineSong.loop = true
-        this.ucarineSong.volume = 1
-        this.ucarineSong.play()
+        this.playAudio(this.ucarineSong, 1, true)
         
         this.generateForm()
         this.generateAside()
@@ -96,12 +99,15 @@ class IntroForm {
             this.element.style.backgroundColor =  colors.black
             form.style.backgroundColor =  colors.transparent_a23
             form.style.boxShadow = `0 0 .5em ${colors.blue_serius_ac7}`
+            // console.log('active')
         }
         else
         {
             this.element.style.backgroundColor = colors.white
             form.style.backgroundColor = colors.blue_baby
             form.style.boxShadow ='none'
+            // console.log('not active')
+
         }
     }
     handleElements(){
@@ -124,21 +130,40 @@ class IntroForm {
         startBtn.addEventListener('click', (e) => {
             e.preventDefault()
             if(nameInput.value){
-                this.ucarineSong.pause()
-                this.transitionSong.play()
+                this.stopCurrentAudio()
+                this.playAudio(this.transitionSong)
                 introForm.style.opacity = 0
                 
                 setTimeout(() => {
                     const game = new MemoryGame(16, nameInput.value, this.gameDisplay)
                     this.element.style.display = "none"
                     game.startGame()
-                    this.element.remove()
                 }, 1000)
             }else{
                 alert('Digite um nome válido')
             }
         })
     }
+    playAudio(audioBuffer, volume = 1.0, loop = false){
+        const src = this.audioContext.createBufferSource()
+        src.buffer = audioBuffer
+        src.loop = loop
+
+        const gainNode = this.audioContext.createGain()
+        gainNode.gain.value = volume 
+        
+        src.connect(gainNode)
+        gainNode.connect(this.audioContext.destination)
+        src.start()
+        if(loop === true) this.currentAudio = src
+    }
+    stopCurrentAudio(){
+        if(this.currentAudio) {
+            this.currentAudio.stop()
+            this.currentAudio = null
+        }
+    }
+    
 }
 export{
     IntroForm

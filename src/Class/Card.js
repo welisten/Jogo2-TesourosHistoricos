@@ -1,9 +1,10 @@
 
 class Card {
-    constructor(value, collumn, row, URL, description) {
-        this.value = value;
+    constructor(name, collumn, row, element, description, src) {
+        this.name = name;
         this.description = description,
-        this.URL = URL,
+        this.src = src
+        this.element = element,
         this.location = {row: row, collumn: collumn}
         this.isFlipped = false;
         this.isMatched = false;

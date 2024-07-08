@@ -1,4 +1,4 @@
-import { colors } from "../Consts/colors.js"
+import { colors } from "../Consts/Colors.js"
 class GameDisplay{
     constructor(father,){
         this.father = father
@@ -54,8 +54,6 @@ class GameDisplay{
             this.bar.toggleDisplayBar()
             this.body.toggleDisplayBody()
             this.footer.toggleDisplayFooter()
-
-            
         }else{
             this.header.element.style.transition = 'none'
             setTimeout(()=>{
@@ -96,7 +94,7 @@ class GameDisplay{
         }
     }
     toggleDisplayLines(){
-        if(!this.LibrasBtn.classList.contains('active')){
+        if(this.LibrasBtn.classList.contains('active')){
             setTimeout(() => {
                 document.querySelectorAll('.line').forEach((line) => {
                     line.style.display = 'none'
@@ -178,7 +176,7 @@ class DisplayHeader{                // ESSA CLASSE SE DIFERENCIA DAS DEMAIS, REF
     startClock(){   
         this.counter = setInterval(() => {
             if((typeof this.timer) !== 'number'){
-                this.timer = Number(this.timer)
+                this.timer = 0
                 this.timer++
             }else {
                 this.timer++
@@ -242,7 +240,7 @@ class DisplayBar{
 
         const userName =  document.createElement('div')
         const userTreasures =  document.createElement('div')
-        const treasure = document.createElement('img')
+        const treasure = this.getImage('treasure')
         const treasureNumber = document.createElement('span')
         const userLevel = document.createElement('div')
         this.element =  document.createElement('div')
@@ -254,8 +252,8 @@ class DisplayBar{
         userTreasures.classList.add('userTreasure')
         userLevel.classList.add('userLevel')
         
-        treasure.src = './Assets/imgs/treasure.png'
         treasure.alt = 'tesouros coletados' 
+        treasure.title = 'tesouros coletados' 
         treasureNumber.innerText = this.game.user.treasures ? this.game.user.treasures : 0 
         treasureNumber.classList.add('treasuresNumber')
         treasure.classList.add('treasure')
@@ -316,6 +314,9 @@ class DisplayBar{
         this.element.style.fontWeight = '400'
         this.element.style.color = '#3e3e3f'
     }
+    getImage(name){                 // RETORNA A IMAGEM DO OBJ GLOBAL, ARMAZENADA NO PRELOAD (BLOB)
+        return gameAssets[name]
+    }
 
 }
 
@@ -344,11 +345,17 @@ class DisplayBody{
         
         this.element.style.display = 'flex'
     }
-    updateDisplayImg(url){   // atualiza a imagem com a URL passada
-        document.querySelector('.bodyImg').setAttribute('src', url)
+    updateDisplayImg(src, alt = '', title = ''){   // atualiza a imagem com a URL passada
+        if(this.img.style.display == 'none'){
+            this.img.style.display = 'block'
+        }
+        this.img.setAttribute('src', src)
+        this.img.alt = alt
+        this.img.title = title
+
     }
     handleWin(){
-        this.img.setAttribute('src', './Assets/imgs/trofeu.png')
+        this.updateDisplayImg('./Assets/imgs/trophy.png', 'trofel', 'trofel')
     }
     reset(){
         this.img.style.display = 'none'
@@ -365,6 +372,7 @@ class DisplayBody{
         }else{
             // todos aparecem
             setTimeout(() => {
+            this.element.style.display = 'flex'
             this.element.style.display = 'flex'
             // this.imgContainer.style.display = 'block'
             // this.img.style.display = 'block'
@@ -415,7 +423,7 @@ class DisplayFooter{
     }
     handleWin(){
         this.element.firstChild.style.fontSize = '2rem'
-        this.updateFooterText(`<p>Obrigado por Jogar !</p><br><br><p>Desenvolvido por Wesley Welisten</p>`)
+        this.updateFooterText(`<p>Obrigado por Jogar !</p><br><p>Desenvolvido por Wesley Welisten</p>`)
     }
     reset(){
         this.footerText = ''

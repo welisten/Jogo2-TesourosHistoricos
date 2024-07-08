@@ -6,8 +6,11 @@ class GameAcessibleDisplay{
         this.librasBtn = document.querySelector('.libras_btn')
         this.lightModeBtn = document.querySelector('.lightMode_btn')
     }
+    setAcessibleDisplay(){
+        this.lightModeBtn
+    }
     toggleDisplay(){
-        if(this.toggleBtn.classList.contains('active')){
+        if(this.librasBtn.classList.contains('active')){
                 this.element.style.display = 'block'
                 setTimeout(() => {
                   this.element.style.height = '73%'
@@ -25,10 +28,12 @@ class GameAcessibleDisplay{
         }   
     }
     toggleLight(){
-        if(this.lightModeBtn.classList.contains('.active')){
-
+        if(this.lightModeBtn.classList.contains('active')){
+            this.element.style.background = colors.transparent_a10
+            this.element.style.border = `1px solid ${colors.blue_baby}`
         }else{
-
+            this.element.style.background = colors.white
+            this.element.style.border = `3px solid ${colors.blue_baby}`
         }
     }
     updateAccessibleContainer(){

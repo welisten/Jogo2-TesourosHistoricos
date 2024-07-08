@@ -6,6 +6,7 @@ const colors = {
     black: '#000000',
     blue_dark_theme: '#056db3',
     blue_baby: '#3498db',
+    blue_card_border: '#023353',
     blue_baby_a80: '#3498db80',
     blue_serius_ac7: '#1d7fffc7', // form shadow
     transparent_a10: '#ffffff10',

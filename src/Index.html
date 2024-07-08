@@ -13,22 +13,24 @@
     <!-- font-awesome - 6.5.2 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="./Style/style.css">
+    <!-- phaser -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
 </head>
 <body>
     <div id="gameContainer" class="mainContainer">
         <div id="introFormContainer" ></div>
         <div id="gameControls">
-            <button class="btn mute_btn active" id="mute" title="Som do jogo">
-                <i class="fa-solid fa-volume-high " id="mute_icon"></i>
+            <button class="controlBtn mute_btn active" id="mute" title="Som do jogo">
+                <i class="fa-solid fa-volume-high" id="mute_icon"></i>
             </button>
-            <button class="btn libras_btn " id="" title="Movimentação acessível" title="Linguagem de sinais">
+            <button class="controlBtn libras_btn " id="" title="Movimentação acessível" title="Linguagem de sinais">
                 <i class="fa-solid fa-hands"></i>
             </button>
-            <button class="btn screenReader_btn" id="" title="Leitor de tela">
+            <button class="controlBtn screenReader_btn" id="" title="Leitor de tela">
                 <i class="fa-solid fa-eye"></i>
             </button>
-            <button class="btn lightMode_btn active" id="lightMode" title="Leitor de tela">
-                <i class="fa-solid fa-moon"></i>
+            <button class="controlBtn lightMode_btn active" id="lightMode" title="Leitor de tela">
+                <i class="fa-solid fa-sun"></i>
             </button>
         </div>
         <div id="horizontalRuler" class="ruler horizontalRuler">
