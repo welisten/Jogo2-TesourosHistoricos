@@ -19,25 +19,57 @@
     --blue-baby: #3498db;
     --blue-ruler: #1659af;
     --transparent_a10: var(--transparent_a10);
-    --transparent_a80: #ffffff80
+    --transparent_a80: #ffffff80;
+    --negative-red: #df2121;
 }
 html{
     font-size: 62.5%;
 }
 body {
     font-family: "Exo 2", sans-serif;
+    height: 100vh;
+    background-color: var(--body-color-dark);
+}
+main{
+    position: relative;
+    height: 100vh;                                                              /* TEMPORARIO  */
+    width: 100vw; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    
-
-    background-color: var(--body-color-dark);
+    justify-content: center;                                                              /* TEMPORARIO */
 }
-h1 {
-    margin-bottom: 20px;
-    font-size: 3rem;
+
+#popUp{
+    position: absolute;
+    display: none;
+    top: 15PX;
+    left: 15PX;
+    height: 15vh;
+    width: 45vh;
+    padding: .5rem;
+    background-color: #056db39c;
+    backdrop-filter: blur(50px);
+    border: 1px solid var(--blue-baby);
+    justify-content: center;
+}
+#popUp p{
+    color: var(--white-ice-A9f);
+    font-size: 1.6rem;
+    align-self: center;
+
+}
+#popUp button{
+    position: fixed;
+    top: .5rem;
+    right: .5rem;
+    height: 3vh;
+    width: 3vh;
+    font-size: 1.4rem;
+    border-radius: 50%;
+    border: none;
+    color: var(--negative-red);
+    cursor: pointer;
 }
 
 #introFormContainer{

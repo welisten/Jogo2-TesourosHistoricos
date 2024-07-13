@@ -34,11 +34,20 @@ class IntroForm {
         // CRIAR ELEMENTO FORMULARIO EM FUTURA REFATORAÇÃO
         // LEVAR EM CONSIDERAÇÃO O USO OU NÃO USO DE UM BANCO DE DADOS
         const introForm = document.createElement('form')
-        const formTitle = document.createElement('h2')
+        const formTitle = document.createElement('div')
         const formBody = document.createElement('div')
         const nameLabel = document.createElement('label')
         const nameInput = document.createElement('input')
         const startBtn  = document.createElement('button')
+
+        formTitle.setAttribute('tabindex', '5')
+        formTitle.setAttribute('aria-label',   "Olá, vamos começar digitando o seu nome")
+
+        nameInput.setAttribute('tabindex', '6')
+        nameInput.setAttribute('aria-label', 'Digite seu nome')
+
+        startBtn.setAttribute('tabindex', '7')
+        startBtn.setAttribute('aria-label', 'Iniciar')
 
         introForm.classList.add('introForm')                                    // CONFIGURA OS ATRIBUTOS
         formTitle.classList.add('formTitle')
@@ -66,7 +75,7 @@ class IntroForm {
         this.element.appendChild(introForm)
         
         this.handleElements()
-        this.typewriter('Ola! Vamos começar digitando o seu Nome.', formTitle)
+        this.typewriter('Olá ! Vamos começar digitando o seu nome.', formTitle)
 
     }
     generateAside(){
@@ -145,9 +154,26 @@ class IntroForm {
                     game.startGame()
                 }, 1000)
             }else{
-                alert('Digite um nome válido')
+                this.popUpMessage('Digite um nome válido')
             }
         })
+    }
+    popUpMessage(message){
+        const popUp = document.getElementById('popUp')
+        const popupText = document.querySelector('.popupText')
+        
+
+        popUp.style.display = 'flex'
+        popupText.textContent = message
+        popUp.setAttribute('tabindex', '1')
+        popUp.setAttribute('aria-label', message)
+        popUp.focus()
+
+        setTimeout(() => {
+            popUp.style.display = 'none'
+            popupText.textContent = ''
+            document.querySelector('.nameInput').focus()
+        }, 2500)
     }
     playAudio(audioBuffer, volume = 1.0, loop = false){
         const src = this.audioContext.createBufferSource()
