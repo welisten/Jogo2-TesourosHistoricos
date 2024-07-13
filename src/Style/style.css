@@ -168,13 +168,11 @@ h1 {
     transform: translateY(-50%);
 }
 #gameControls .controlBtn {
-    padding: 7px;
-    margin: 5px;
     height: 4vh;
     width: 4vh;
     border: 1px solid white;
     color: #fff;
-    font-size: 2rem;
+    font-size: 1.5rem;
     border-radius: 7px;
     transition: 0.5s;
     transition-property: box-shadow;

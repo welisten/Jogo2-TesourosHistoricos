@@ -1,12 +1,13 @@
 import  { Card }  from '../Class/Card.js';
 import  { User }  from '../Class/User.js';
 import { colors } from '../Consts/Colors.js';
+import { gameData } from '../script.js';
 import { cardsImagesDataArr } from '../Consts/Values.js';
 import { LevelScore } from './LevelScore.js'
 
 
 class MemoryGame {
-    constructor(size, user_name, gameDisplay) {
+    constructor(size, user_name, gameDisplay, gainNode, audioContext) {
         this.mainContainer = document.querySelector('#gameContainer')               // SCENE(GAME CONTAINER)
         this.gameContainerElement =  document.querySelector('#gameBoard')
 
@@ -15,11 +16,12 @@ class MemoryGame {
         this.flippedCards = []                                                  // FLIPPED CARDS STORE
         this.user = new User(user_name)
         this.gameDisplay = gameDisplay
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)()                             // ASIDE GAME ACCESSIBLE CONTAINER
+        this.audioContext = audioContext                             // ASIDE GAME ACCESSIBLE CONTAINER
         this.mainSong = gameAssets['main']
         this.selectSong = gameAssets['select']
         this.successSong = gameAssets['success']
         this.failSong = gameAssets['fail']
+        this.gainNode = gainNode
         this.currentAudio = null
         this.isClickAble = true
         this.generateCards()
@@ -128,7 +130,7 @@ class MemoryGame {
             this.stopCurrentAudio()
             document.getElementById('gameBoard').style.display = "none"
 
-            new LevelScore(this.mainContainer, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this)
+            new LevelScore(this.mainContainer, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this.gainNode, this.audioContext, this)
             this.gameDisplay.handleWin()
         }
 
@@ -228,11 +230,11 @@ class MemoryGame {
         src.buffer = audioBuffer
         src.loop = loop
 
-        const gainNode = this.audioContext.createGain()
-        gainNode.gain.value = volume 
+        volume = gameData.isMute === true ? 0 : 1
+        this.gainNode.gain.value = volume 
         
-        src.connect(gainNode)
-        gainNode.connect(this.audioContext.destination)
+        src.connect(this.gainNode)
+        this.gainNode.connect(this.audioContext.destination)
         src.start()
         if(loop === true) this.currentAudio = src
     }

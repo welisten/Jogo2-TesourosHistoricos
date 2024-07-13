@@ -1,17 +1,20 @@
+import { gameData } from "../script.js"
+
 class LevelScore{
-    constructor(father, name, time, level, game ){
+    constructor(father, name, time, level, gainNode, audioContext, game ){
         this.father = father
         this.element = ''
         this.userName = name
         this.userTime = time
         this.userLevel = level
         this.game = game
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)()                             // ASIDE GAME ACCESSIBLE CONTAINER
+        this.audioContext = audioContext                             // ASIDE GAME ACCESSIBLE CONTAINER
 
         this.songVictory =  gameAssets['victory']
         this.songApplause = gameAssets['aplause']
         this.transitionSong = gameAssets['transition']
         this.currentAudio = []
+        this.gainNode = gainNode
 
         this.playAudio( this.songVictory, 1.0, true )
         this.playAudio( this.songApplause, 1.0, true )
@@ -178,11 +181,11 @@ class LevelScore{
         src.buffer = audioBuffer
         src.loop = loop
 
-        const gainNode = this.audioContext.createGain()
-        gainNode.gain.value = volume 
+        volume = gameData.isMute === true ? 0 : 1
+        this.gainNode.gain.value = volume 
         
-        src.connect(gainNode)
-        gainNode.connect(this.audioContext.destination)
+        src.connect(this.gainNode)
+        this.gainNode.connect(this.audioContext.destination)
         src.start()
         if(loop === true )this.currentAudio.push(src)
     }

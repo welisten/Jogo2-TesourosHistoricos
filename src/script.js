@@ -2,9 +2,10 @@ import { Preloader } from './Scenes/Preload.js';
 
 const gameData = {
   isPreloadComplete: false,
-  intro: undefined
+  intro: undefined, 
+  isMute: false
 } 
-const gameReference = new Preloader()
+new Preloader()
 const accessibleContainer = document.getElementById('gameAccessibleContainer')
 const mainContainers = document.querySelectorAll('.mainContainer')
 const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
@@ -31,12 +32,14 @@ btns.forEach(btn => {
 })
 
 const btnsAndClss = []
+
 btns.forEach((elem, i) => btnsAndClss[i] = [elem, elem.className.split(' ')[1]])
 btnsAndClss.forEach( elemClassArr => {
   switch(elemClassArr[1]){
-      case 'mute_btn':
-        elemClassArr[0].addEventListener('click', () => {
-          const icon = elemClassArr[0].children[0]
+    case 'mute_btn':
+      elemClassArr[0].addEventListener('click', () => {
+        gameData.isMute = !gameData.isMute
+        const icon = elemClassArr[0].children[0]
 
           elemClassArr[0].classList.toggle('active')
           icon.classList.toggle('fa-volume-xmark')

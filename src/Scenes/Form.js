@@ -2,6 +2,7 @@ import  { MemoryGame } from './Game.js';
 import  { GameDisplay } from '../Class/GameDisplay.js'
 import  { GameAcessibleDisplay} from '../Class/GameAccessible.js'
 import  { colors } from '../Consts/Colors.js';
+import  { gameData } from '../script.js';
 
 class IntroForm {
     constructor(){
@@ -12,10 +13,9 @@ class IntroForm {
         this.ucarineSong    = gameAssets['ucarine']
         this.transitionSong = gameAssets['transition']
         this.currentAudio = null
+        this.gainNode = this.audioContext.createGain()
         this.lightModeBtn =  document.querySelector('.lightMode_btn')
         this.generateScene()
-
-        
     }
 
     generateScene(){
@@ -23,6 +23,11 @@ class IntroForm {
         
         this.generateForm()
         this.generateAside()
+
+        const mute_btn = document.querySelector('.mute_btn')
+        mute_btn.addEventListener('click', () => {
+            this.gainNode.gain.value == 1 ? this.gainNode.gain.value = 0 : this.gainNode.gain.value = 1
+        })
     }
     generateForm(){
         this.element = document.getElementById('introFormContainer')            //CRIA OS ELEMENTOS
@@ -135,7 +140,7 @@ class IntroForm {
                 introForm.style.opacity = 0
                 
                 setTimeout(() => {
-                    const game = new MemoryGame(16, nameInput.value, this.gameDisplay)
+                    const game = new MemoryGame(16, nameInput.value, this.gameDisplay, this.gainNode, this.audioContext)
                     this.element.style.display = "none"
                     game.startGame()
                 }, 1000)
@@ -149,11 +154,11 @@ class IntroForm {
         src.buffer = audioBuffer
         src.loop = loop
 
-        const gainNode = this.audioContext.createGain()
-        gainNode.gain.value = volume 
+        volume = gameData.isMute === true ? 0 : 1
+        this.gainNode.gain.value = volume 
         
-        src.connect(gainNode)
-        gainNode.connect(this.audioContext.destination)
+        src.connect(this.gainNode)
+        this.gainNode.connect(this.audioContext.destination)
         src.start()
         if(loop === true) this.currentAudio = src
     }
