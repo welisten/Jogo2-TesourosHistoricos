@@ -13,7 +13,6 @@ class Preloader {
 
     setPreloader(){
         const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
-
         const config = {
             type: Phaser.AUTO,
             width: containerWidth,

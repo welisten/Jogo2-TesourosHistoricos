@@ -166,8 +166,9 @@ class IntroForm {
         popUp.style.display = 'flex'
         popupText.textContent = message
         popUp.setAttribute('tabindex', '1')
+        popUp.setAttribute('aria-live', "polite")
         popUp.setAttribute('aria-label', message)
-        popUp.focus()
+        popUp.focus()       
 
         setTimeout(() => {
             popUp.style.display = 'none'
