@@ -12,6 +12,7 @@ class IntroForm {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)()                             // ASIDE GAME ACCESSIBLE CONTAINER
         this.ucarineSong    = gameAssets['ucarine']
         this.transitionSong = gameAssets['transition']
+        this.errorSong = gameAssets['incorrect']
         this.currentAudio = null
         this.gainNode = this.audioContext.createGain()
         this.lightModeBtn =  document.querySelector('.lightMode_btn')
@@ -19,6 +20,8 @@ class IntroForm {
     }
 
     generateScene(){
+        document.getElementById('gameBoard').style.display = 'none'
+
         this.playAudio(this.ucarineSong, 1, true)
         
         this.generateForm()
@@ -34,19 +37,20 @@ class IntroForm {
         // CRIAR ELEMENTO FORMULARIO EM FUTURA REFATORAÇÃO
         // LEVAR EM CONSIDERAÇÃO O USO OU NÃO USO DE UM BANCO DE DADOS
         const introForm = document.createElement('form')
-        const formTitle = document.createElement('div')
+        const formTitle = document.createElement('p')
         const formBody = document.createElement('div')
         const nameLabel = document.createElement('label')
         const nameInput = document.createElement('input')
         const startBtn  = document.createElement('button')
 
-        formTitle.setAttribute('tabindex', '5')
-        formTitle.setAttribute('aria-label',   "Olá, vamos começar digitando o seu nome")
+        formTitle.setAttribute('tabindex', '2')
+        formTitle.setAttribute('aria-label', "Olá, vamos começar digitando o seu nome")
 
-        nameInput.setAttribute('tabindex', '6')
+        nameInput.setAttribute('tabindex', '2')
         nameInput.setAttribute('aria-label', 'Digite seu nome')
+        nameInput.setAttribute('aria-required', 'true')
 
-        startBtn.setAttribute('tabindex', '7')
+        startBtn.setAttribute('tabindex', '2')
         startBtn.setAttribute('aria-label', 'Iniciar')
 
         introForm.classList.add('introForm')                                    // CONFIGURA OS ATRIBUTOS
@@ -92,6 +96,9 @@ class IntroForm {
         setTimeout(() => {
             function tWriter(){//RECURSIVIDADE
                 if(node >= titleArr.length){//PONTO DE PARADA
+                    if(gameData.isScreenReaderActive){
+                        document.querySelector('.formTitle').focus()
+                    }
                     return
                 }
                                                 
@@ -144,44 +151,85 @@ class IntroForm {
         startBtn.addEventListener('click', (e) => {
             e.preventDefault()
             if(nameInput.value){
-                this.stopCurrentAudio()
-                this.playAudio(this.transitionSong)
                 introForm.style.opacity = 0
-                
+                let delay = 6500
+                if(gameData.isScreenReaderActive){
+                    delay = 4000
+                    let aux = 3
+                    // this.popUpMessage('O jogo começa em', null, 1000, false)
+                    this.readText('O jogo começa em', false)
+                    setTimeout(() => {
+                        let countdown = setInterval(() => {
+                            if(aux <= 0 ) {
+                                clearInterval(countdown)
+                                
+                                return
+                            }else if(aux === 1){
+                                this.stopCurrentAudio()
+                                this.playAudio(this.transitionSong)
+                            }
+                            // popupText.textContent += ` ${aux}`
+                            this.readText(aux, false)
+                            console.log(aux)
+                            aux--
+                        }, 1000)
+                    }, 500)
+
+                }else{
+                    this.playAudio(this.transitionSong)
+                }
                 setTimeout(() => {
                     const game = new MemoryGame(16, nameInput.value, this.gameDisplay, this.gainNode, this.audioContext)
                     this.element.style.display = "none"
+
                     game.startGame()
-                }, 1000)
+                }, delay)
+
             }else{
-                this.popUpMessage('Digite um nome válido')
+                let delay = 2500
+                this.playAudio(this.errorSong)
+                this.popUpMessage('Digite um nome válido', '.nameInput', delay)
             }
         })
     }
-    popUpMessage(message){
+    popUpMessage(message, nxtElem, delay = 2500, isVisible = true, chaining = false){
         const popUp = document.getElementById('popUp')
         const popupText = document.querySelector('.popupText')
+        const nextFocusElement = document.querySelector(nxtElem)
         
-
-        popUp.style.display = 'flex'
+        if(isVisible){ 
+            popUp.style.opacity = 1
+        }
+        
+        if(!chaining) popupText.textContent = ''
+        popupText.setAttribute('tabindex', 1)
         popupText.textContent = message
-        popUp.setAttribute('tabindex', '1')
-        popUp.setAttribute('aria-live', "polite")
-        popUp.setAttribute('aria-label', message)
-        popUp.focus()       
-
-        setTimeout(() => {
-            popUp.style.display = 'none'
-            popupText.textContent = ''
-            document.querySelector('.nameInput').focus()
-        }, 2500)
+        popupText.focus() 
+        
+        if(isVisible){
+            setTimeout(() => {
+                popUp.style.opacity = 0
+            }, delay);
+        }
+        if(nxtElem && gameData.isScreenReaderActive){
+            console.log(delay);
+            setTimeout(() => nextFocusElement.focus(), delay + 100)
+        }
+        
     }
+    readText(text, textChaining = false){
+        const textToReaderEl = document.querySelector('.textToReader')
+
+        textToReaderEl.textContent = textChaining ? `${popupText.textContent} ${text}` : `${text}`
+    }
+
     playAudio(audioBuffer, volume = 1.0, loop = false){
         const src = this.audioContext.createBufferSource()
+        let aux = volume
         src.buffer = audioBuffer
         src.loop = loop
 
-        volume = gameData.isMute === true ? 0 : 1
+        volume = gameData.isMute === true ? 0 : aux
         this.gainNode.gain.value = volume 
         
         src.connect(this.gainNode)

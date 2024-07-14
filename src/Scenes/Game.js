@@ -40,6 +40,8 @@ class MemoryGame {
         const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
         
         board.style.display = 'grid'
+        board.style.gridTemplateColumns = 'repeat(4, 25%)'
+        board.style.border = '3px solid var(--blue-baby)'
         board.style.height = `${containerWidth}px` 
         board.style.width = `${containerWidth}px` 
 

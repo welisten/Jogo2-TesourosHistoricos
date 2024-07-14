@@ -3,7 +3,10 @@ import { Preloader } from './Scenes/Preload.js';
 const gameData = {
   isPreloadComplete: false,
   intro: undefined, 
-  isMute: false
+  isMute: false,
+  isDarkMode: true,
+  isScreenReaderActive: true,
+  isLibrasActive: false
 } 
 new Preloader()
 const accessibleContainer = document.getElementById('gameAccessibleContainer')
@@ -67,11 +70,18 @@ btnsAndClss.forEach( elemClassArr => {
         break
 
       case 'screenReader_btn':
-        // console.log('leitor')
+        const screenReader_btn = document.querySelector('.screenReader_btn')
+        elemClassArr[0].addEventListener('click', () => {
+          console.log(gameData)
+          gameData.isScreenReaderActive = !gameData.isScreenReaderActive
+          screenReader_btn.classList.toggle('active')
+        })
+        
         break
 
       case 'lightMode_btn':
         elemClassArr[0].addEventListener('click', () => {
+          gameData.isDarkMode =  !gameData.isDarkMode
           if(elemClassArr[0].classList.contains('active')){ //              entrando no modo LIGHT
             
             elemClassArr[0].classList.toggle('active')

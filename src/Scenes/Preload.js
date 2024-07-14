@@ -13,15 +13,14 @@ class Preloader {
 
     setPreloader(){
         const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
+        const parent = document.querySelector('#gameBoard')
         const config = {
             type: Phaser.AUTO,
             width: containerWidth,
             height: containerWidth,
+            parent: parent,
             scene: {
                 preload: this.preload,
-            },
-            dom: {
-                createContainer: true
             }
         }
 
@@ -31,6 +30,7 @@ class Preloader {
         const gameCanvas = this.sys.game.canvas
 
         gameCanvas.id = 'jogo2_canvas'
+        gameCanvas.parentNode.style.display = 'flex'
         gameCanvas.style.border = `5px solid ${colors.blue_baby}`;
         gameCanvas.style.borderRadius = "20px"
         
@@ -47,9 +47,6 @@ class Preloader {
             return this.cache.audio.get(key)
         }
 
-        // cardsImagesDataArr.forEach((dataObj) => {
-        //     this.load.image(dataObj.name, dataObj.src)
-        // })
         for(let dataObj of cardsImagesDataArr){
             this.load.image(`${dataObj.name}_1`, dataObj.src)
             this.load.image(`${dataObj.name}_2`, dataObj.src)
@@ -96,12 +93,13 @@ class Preloader {
         });
         this.load.on('complete',  () => {
             gameData.isPreloadComplete = true
-
+            
+            const textToReaderEl = document.querySelector('.textToReader')
             const controls = document.querySelector('#gameControls')
             const asideDisplay = document.querySelector('#gameBoard_aside')
             const mainDisplay = document.querySelector('#gameContainer')
-            const phaserCanvas =  document.querySelector('#jogo2_canvas')
             
+            textToReaderEl.textContent = 'O jogo foi carregado com sucesso.'
             audioDataArr.forEach( dataObj => criarObjeto(store, dataObj.name, getAudio(dataObj.name)))
             for(let dataObj of cardsImagesDataArr){
                 criarObjeto(store, `${dataObj.name}_1`, getImage(`${dataObj.name}_1`))
@@ -121,15 +119,17 @@ class Preloader {
                 controls.style.display = 'flex'
                 asideDisplay.style.display = 'flex'
                 mainDisplay.style.display = 'flex'
-                phaserCanvas.style.display = 'none'
                 
+
                 progressBar.destroy();
                 progressBox.destroy();
                 loadingText.destroy();
+                gameCanvas.remove()
                 gameData.intro =  new IntroForm()
             }, 500)
         });
     }
+
     getIntro(){
         if (this.intro) {
             console.log('Starting the game with intro:', this.intro);

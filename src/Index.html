@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo 2</title>
+    <title></title>
 
     <script type="module" src="./script.js"></script>
     <!-- jquery-3.6.0 -->
@@ -21,22 +21,25 @@
     <nav style="display: none;"></nav>
     <main>
         <div id="popUp">
-            <p class="popupText">Tres ratos tristes</p>
-            <button class="close_btn"><i class="fa-solid fa-xmark"></i></button>
+            <p class="popupText"></p>
+        </div>
+        <div id="toTextReader" aria-live="assertive">
+            <p class="textToReader"></p>
         </div>
         <section id="gameContainer" class="mainContainer">
-            <div id="introFormContainer" ></div>
-            <div id="gameControls">
-                <button class="controlBtn mute_btn active" id="mute" title="Som do jogo" tabindex="1" aria-label="retirar som">
+            <div id="introFormContainer"></div>
+            <!-- <div id="introFormContainer" tabindex="1" aria-label="tela"></div> -->
+            <div id="gameControls" tabindex="3" aria-label="opções">
+                <button class="controlBtn mute_btn" id="mute" title="Som do jogo" tabindex="4" aria-label="alternar som">
                     <i class="fa-solid fa-volume-high" id="mute_icon"></i>
                 </button>
-                <button class="controlBtn libras_btn " id=""  title="Linguagem de sinais" tabindex="2" aria-label="libras">
+                <button class="controlBtn libras_btn " id=""  title="Linguagem de sinais" tabindex="5" aria-label="libras">
                     <i class="fa-solid fa-hands"></i>
                 </button>
-                <button class="controlBtn screenReader_btn" id="" title="Leitor de tela" tabindex="3" aria-label="leitor de tela">
+                <button class="controlBtn screenReader_btn active" id="" title="Leitor de tela" tabindex="6" aria-label="leitor de tela">
                     <i class="fa-solid fa-eye"></i>
                 </button>
-                <button class="controlBtn lightMode_btn active" id="lightMode" title="Leitor de tela" tabindex="4" aria-label="mudar iluminação">
+                <button class="controlBtn lightMode_btn active" id="lightMode" title="Leitor de tela" tabindex="7" aria-label="alternar iluminação">
                     <i class="fa-solid fa-sun"></i>
                 </button>
             </div>
