@@ -8,10 +8,13 @@ const gameData = {
   isScreenReaderActive: true,
   isLibrasActive: false
 } 
+
 new Preloader()
+
 const accessibleContainer = document.getElementById('gameAccessibleContainer')
-const mainContainers = document.querySelectorAll('.mainContainer')
-const containerWidth  = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
+const mainContainers      = document.querySelectorAll('.mainContainer')
+
+let containerWidth        = Math.floor(window.innerWidth * 0.5) > 760 ? 760 : Math.floor(window.innerWidth * 0.4)
 
 mainContainers.forEach(container => {
   container.style.width = `${containerWidth}px`
@@ -19,7 +22,7 @@ mainContainers.forEach(container => {
 })
 
 const btns =  document.querySelectorAll('.controlBtn') 
-btns.forEach(btn => {
+btns.forEach(btn => {         // handle hover buttons state
   btn.addEventListener('click', (e) => {
     e.preventDefault()
     btn.classList.remove('hovered');
@@ -34,80 +37,85 @@ btns.forEach(btn => {
   });
 })
 
-const btnsAndClss = []
+let auxText = ''
+const readText = (text) => {
+  let elem = document.querySelector('.textToReader')
+ 
+  if(text === auxText) text += '.'
+  auxText = text
+  elem.textContent = text
+}
 
-btns.forEach((elem, i) => btnsAndClss[i] = [elem, elem.className.split(' ')[1]])
+const btnsAndClss = []                                                          // para cada botão, suas respectivas classes                                                          
+btns.forEach((elem, i) => btnsAndClss[i] = [elem, elem.className.split(' ')[1]])// armazena para cada botão de controle, uma arrey contendo o elemento e a 2° classe desse elemento(botão)
+
 btnsAndClss.forEach( elemClassArr => {
   switch(elemClassArr[1]){
     case 'mute_btn':
       elemClassArr[0].addEventListener('click', () => {
         gameData.isMute = !gameData.isMute
-        const icon = elemClassArr[0].children[0]
-
-          elemClassArr[0].classList.toggle('active')
-          icon.classList.toggle('fa-volume-xmark')
-          icon.classList.toggle('fa-volume-high')
-        })
-        break
-      
-      case 'libras_btn':
-        const libras_btn = document.querySelector('.libras_btn')
-        elemClassArr[0].addEventListener('click', (e) => {
-          if(!accessibleContainer.classList.contains('active')){ // NÃO ESTÁ EM TELA
-            libras_btn.classList.toggle('active')
-            accessibleContainer.classList.toggle('active')
-            
-            gameData.intro.gameDisplay.toggleDisplay()
-            gameData.intro.gameAcessibleDisplay.toggleDisplay()
-          }else{                                                // ESTÁ EM TELA
-            libras_btn.classList.toggle('active')
-            accessibleContainer.classList.toggle('active')
-
-            gameData.intro.gameDisplay.toggleDisplay()
-            gameData.intro.gameAcessibleDisplay.toggleDisplay()
-          }
-        })
-        break
-
-      case 'screenReader_btn':
-        const screenReader_btn = document.querySelector('.screenReader_btn')
-        elemClassArr[0].addEventListener('click', () => {
-          console.log(gameData)
-          gameData.isScreenReaderActive = !gameData.isScreenReaderActive
-          screenReader_btn.classList.toggle('active')
-        })
+        if(gameData.isScreenReaderActive){
+          let state = elemClassArr[0].classList.contains('active') ? 'ativado' : 'desativado'
+          readText(`O Som foi ${state} `)
+        }
+        elemClassArr[0].classList.toggle('active')
         
-        break
+        const icon = elemClassArr[0].children[0]
+        icon.classList.toggle('fa-volume-xmark')
+        icon.classList.toggle('fa-volume-high')
+      })
+      break
+      
+    case 'libras_btn':
+      elemClassArr[0].addEventListener('click', (e) => {
+        console.log(gameData)
+        if(!gameData.isScreenReaderActive){ 
+          elemClassArr[0].classList.toggle('active')
+          accessibleContainer.classList.toggle('active')
+          
+          gameData.isLibrasActive = !gameData.isLibrasActive
+          gameData.intro.gameDisplay.toggleDisplay()
+          gameData.intro.gameAcessibleDisplay.toggleDisplay()
+        } else {
+          readText("Infelizmente, não é possivel ativar 2 modos de acessibilidade ao mesmo tempo")
+        }
+      })
+      break
 
-      case 'lightMode_btn':
-        elemClassArr[0].addEventListener('click', () => {
-          gameData.isDarkMode =  !gameData.isDarkMode
-          if(elemClassArr[0].classList.contains('active')){ //              entrando no modo LIGHT
-            
-            elemClassArr[0].classList.toggle('active')
-            elemClassArr[0].children[0].classList.toggle('fa-sun')
-            elemClassArr[0].children[0].classList.toggle('fa-moon')
-           //definir apenas dos elementos pais
-            gameData.intro.toggleLight()
-            gameData.intro.gameDisplay.toggleLight()
-            gameData.intro.gameAcessibleDisplay.toggleLight()
+    case 'screenReader_btn':
+      const screenReader_btn = document.querySelector('.screenReader_btn')
+      elemClassArr[0].addEventListener('click', () => {
+        gameData.isScreenReaderActive = !gameData.isScreenReaderActive
+        let status = gameData.isScreenReaderActive ? 'ativado' : 'desativado'
+        readText(`O aprimoramento do leitor de tela foi ${status}.\n Para jogar no modo acessível para pessoas com deficiência visual recomendamos mantê-lo ativo.`)
+        screenReader_btn.classList.toggle('active')
+      })
+      break
 
-            document.querySelector('body').style.backgroundColor = 'var(--body-color-light)'
-            document.querySelector('#gameBoard').style.backgroundColor = '#ffffff'
-          }else{
-            elemClassArr[0].classList.toggle('active')     //entrando no modo DARK
-            elemClassArr[0].children[0].classList.toggle('fa-sun')
-            elemClassArr[0].children[0].classList.toggle('fa-moon')
+    case 'lightMode_btn':
+      elemClassArr[0].addEventListener('click', () => {
+        gameData.isDarkMode =  !gameData.isDarkMode
+        
+        elemClassArr[0].classList.toggle('active')
+        elemClassArr[0].children[0].classList.toggle('fa-sun')
+        elemClassArr[0].children[0].classList.toggle('fa-moon')
 
-            gameData.intro.toggleLight()
-            gameData.intro.gameDisplay.toggleLight()
-            gameData.intro.gameAcessibleDisplay.toggleLight()
-            
-            document.querySelector('body').style.backgroundColor = 'var(--body-color-dark)'
-            document.querySelector('#gameBoard').style.backgroundColor = '#000'
-          }
-        })
-        break
+        gameData.intro.toggleLight()
+        gameData.intro.gameDisplay.toggleLight()
+        gameData.intro.gameAcessibleDisplay.toggleLight()
+
+        if(!elemClassArr[0].classList.contains('active')){
+          document.querySelector('body').style.backgroundColor = 'var(--body-color-light)'
+          document.querySelector('#gameBoard').style.backgroundColor = '#ffffff'
+        }else{    
+          document.querySelector('body').style.backgroundColor = 'var(--body-color-dark)'
+          document.querySelector('#gameBoard').style.backgroundColor = '#000'
+        }
+        
+        let lightingMode = elemClassArr[0].classList.contains('active') ? 'modo de iluminação escuro' : 'modo de iluminação claro'
+        readText(`${lightingMode} ativado`)
+      })
+      break
       default:
         break
   }

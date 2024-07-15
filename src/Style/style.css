@@ -45,6 +45,7 @@ main{                                                       /*TEMPORARIO*/
     height: 100vh;
     width: 100vw;
 }
+
 #popUp{
     position: absolute;
     display: flex;
@@ -81,7 +82,7 @@ main{                                                       /*TEMPORARIO*/
 
 #toTextReader{
     position: absolute;
-    opacity: 0;
+    opacity: 1;
     top: calc(30px + 15vh);
     left: 15PX;
     height: 15vh;
@@ -92,16 +93,20 @@ main{                                                       /*TEMPORARIO*/
     border: 1px solid var(--blue-baby);
     justify-content: center;
     transition: opacity none;
-}
-#popUp p{
-    color: var(--white-ice-A9f);
-    font-size: 1.6rem;
-    align-self: center;
 
 }
-#jogo2_canvas{
-    display: absolute;
+#toTextReader p{
+    color: var(--white-ice-A9f);
+    font-size: 1.6rem;
+    width: 100%;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    text-overflow: ellipsis;
+    align-self: center;
 }
+
 #introFormContainer{
     width: 100%;
     height: 100%;
