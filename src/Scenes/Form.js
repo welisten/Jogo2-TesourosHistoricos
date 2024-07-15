@@ -152,9 +152,8 @@ class IntroForm {
             e.preventDefault()
             if(nameInput.value){
                 introForm.style.opacity = 0
-                let delay = 6500
+                let delay = gameData.isScreenReaderActive ? 6500 : 1000
                 if(gameData.isScreenReaderActive){
-                    delay = 4000
                     let aux = 3
                     // this.popUpMessage('O jogo começa em', null, 1000, false)
                     this.readText('O jogo começa em', false)
