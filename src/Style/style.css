@@ -82,7 +82,7 @@ main{                                                       /*TEMPORARIO*/
 
 #toTextReader{
     position: absolute;
-    opacity: 1;
+    opacity: 0;
     top: calc(30px + 15vh);
     left: 15PX;
     height: 15vh;
