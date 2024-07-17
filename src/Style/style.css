@@ -15,12 +15,15 @@
     --body-color-light: #efefef;
     --white-ice-A9f: #efefef9f;
     --blue-dark-theme: #056db3;
+    --blue-dark-9c: #056db39c;
     --blue-card-border: #023353;
     --blue-baby: #3498db;
     --blue-ruler: #1659af;
+    --red-negative: #df2121;
+
+
     --transparent_a10: var(--transparent_a10);
     --transparent_a80: #ffffff80;
-    --negative-red: #df2121;
 }
 html{
     font-size: 62.5%;
@@ -48,24 +51,33 @@ main{                                                       /*TEMPORARIO*/
 
 #popUp{
     position: absolute;
-    display: flex;
-    opacity: 0;
-    top: 15PX;
-    left: 15PX;
+    top: 15px;
+    left: 15px;
     height: 15vh;
     width: 45vh;
     padding: .5rem;
-    background-color: #056db39c;
-    backdrop-filter: blur(50px);
     border: 1px solid var(--blue-baby);
+    border-radius: 15px;
+    background-color: var(--blue-dark-9c);
+    backdrop-filter: blur(50px);
+    opacity: 0;
+    display: flex;
     justify-content: center;
-    transition: opacity none;
+    transition: none;
+    text-align: center;
+}
+#popUp.animated{
+    animation: popupShake .15s ease 0s 5  normal forwards;
 }
 #popUp p{
-    color: var(--white-ice-A9f);
+    width: 100%;
+    color: #fff;
     font-size: 1.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
     align-self: center;
-
 }
 #popUp button{
     position: fixed;
@@ -73,11 +85,14 @@ main{                                                       /*TEMPORARIO*/
     right: .5rem;
     height: 3vh;
     width: 3vh;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     border-radius: 50%;
     border: none;
-    color: var(--negative-red);
+    color: var(--red-negative);
     cursor: pointer;
+}
+#popUp button i{
+    line-height: 3vh;
 }
 
 #toTextReader{
@@ -623,7 +638,7 @@ main{                                                       /*TEMPORARIO*/
     font-weight: bolder;
     color: #fff;
     transform: scale(1);
-    animation: titlePulse 1s ease-in-out 0s infinite normal forwards;
+    animation: scoreTitlePulse 1s ease-in-out 0s infinite normal forwards;
 }   
 
 #levelScore .scoreBody{
@@ -772,7 +787,22 @@ main{                                                       /*TEMPORARIO*/
     0%{opacity: 0;}
     100%{ opacity: 1;}
 }
-@keyframes titlePulse{
+@keyframes popupShake{
+    0%, 100%{
+        transform: rotate(0deg);
+    }
+    25%{
+        transform: rotate(-5deg);
+    }
+    50%{
+        transform: rotate(0deg);
+
+    }
+    75%{
+        transform: rotate(5deg);
+    }
+}
+@keyframes scoreTitlePulse{
     0%{transform: scale(1);}
     50%{transform: scale(1.2);}
     100%{transform: scale(1);}
@@ -809,12 +839,8 @@ main{                                                       /*TEMPORARIO*/
         /* border: 1px solid; */
     }
 }
-
 @media screen and (min-width: 2560px ) { /*wideScreen*/
     .introForm .formTitle{
         font-size: clamp(2.8rem, 3.1rem, 3.2rem);
     }
 }
-
-
-

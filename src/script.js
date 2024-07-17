@@ -21,6 +21,11 @@ mainContainers.forEach(container => {
   container.style.height = `${containerWidth}px`  
 })
 
+const popupBtn =  document.querySelector('.popup_btn')
+popupBtn.addEventListener('click', ()=>{
+  popupBtn.parentNode.style.opacity = 0
+})
+
 const btns =  document.querySelectorAll('.controlBtn') 
 btns.forEach(btn => {         // handle hover buttons state
   btn.addEventListener('click', (e) => {
