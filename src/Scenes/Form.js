@@ -113,11 +113,10 @@ class IntroForm {
         startBtn.addEventListener('click', (e) => {
             e.preventDefault()
             if(nameInput.value){
-                introForm.style.opacity = 0
-                let delay = gameData.isScreenReaderActive ? 6500 : 1000
+                let delay = gameData.isScreenReaderActive ? 4500 : 1000
+
                 if(gameData.isScreenReaderActive){
                     let aux = 3
-                    // this.popUpMessage('O jogo começa em', null, 1000, false)
                     this.readText('O jogo começa em', false)
                     setTimeout(() => {
                         let countdown = setInterval(() => {
@@ -129,14 +128,13 @@ class IntroForm {
                                 this.stopCurrentAudio()
                                 this.playAudio(this.transitionSong)
                             }
-                            // popupText.textContent += ` ${aux}`
                             this.readText(aux, false)
-                            console.log(aux)
                             aux--
                         }, 1000)
                     }, 500)
 
                 }else{
+                    this.stopCurrentAudio()
                     this.playAudio(this.transitionSong)
                 }
                 setTimeout(() => {
@@ -150,8 +148,10 @@ class IntroForm {
             }else{
                 let delay = 2500
                 let popUpEl = document.querySelector('#popUp')
+                
                 popUpEl.classList.add('animated')
-                setTimeout(()=>popUpEl.classList.remove('animated'), 1000)
+                setTimeout(() => popUpEl.classList.remove('animated'), 1000)
+                
                 this.playAudio(this.errorSong)
                 this.popUpMessage('Digite um nome válido', '.nameInput', delay)
             }

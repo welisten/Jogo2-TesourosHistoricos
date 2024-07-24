@@ -1,11 +1,12 @@
 
 class Card {
-    constructor(name, collumn, row, element, description, src) {
+    constructor(name, collumn, row, element, description, src/*, tabIndex*/) {
         this.name = name;
         this.description = description,
         this.src = src
         this.element = element,
         this.location = {row: row, collumn: collumn}
+        // this.tabIndex = tabIndex
         this.isFlipped = false;
         this.isMatched = false;
         this.incorrectMatch= false

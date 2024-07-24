@@ -3,6 +3,7 @@
 - fitcontent para number of treasures
 - fitcontent para icones de control btn
 - ativar acessibilidade atravez do botão
+- botão de pausar e remodelar tabIndex dos controles
 
 ## Acessibilidade
 

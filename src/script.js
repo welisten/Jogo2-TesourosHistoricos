@@ -3,10 +3,11 @@ import { Preloader } from './Scenes/Preload.js';
 const gameData = {
   isPreloadComplete: false,
   intro: undefined, 
-  isMute: false,
+  isMute: true,
   isDarkMode: true,
   isScreenReaderActive: true,
-  isLibrasActive: false
+  isLibrasActive: false,
+  lastAccText: '',
 } 
 
 new Preloader()
@@ -60,7 +61,7 @@ btnsAndClss.forEach( elemClassArr => {
       elemClassArr[0].addEventListener('click', () => {
         gameData.isMute = !gameData.isMute
         if(gameData.isScreenReaderActive){
-          let state = elemClassArr[0].classList.contains('active') ? 'ativado' : 'desativado'
+          let state = elemClassArr[0].classList.contains('active') ? 'ativado' : 'desativado' // o status de ativo ou desativo é referente ao som e não ao mudo
           readText(`O Som foi ${state} `)
         }
         elemClassArr[0].classList.toggle('active')
