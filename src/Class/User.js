@@ -31,6 +31,7 @@ class User {
 
     replayUserGame(){
         this.treasures -= 8
+        this.level -= 1
     }
 }
 

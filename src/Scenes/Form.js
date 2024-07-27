@@ -20,6 +20,7 @@ class IntroForm {
         this.gainNode = this.audioContext.createGain()
 
         this.generateScene()
+        gameData.class = 'IntroForm'
     }
 
     generateScene(){                            // CHAMADA DAS FUNÇOES CRIADORAS E CONFIGURADORAS DA CENA

@@ -4,7 +4,7 @@ class LevelScore{
     constructor(father, name, time, level, gainNode, audioContext, game ){
         this.father = father
         this.element = ''
-        this.userName = name
+        this.userName = name[0].toUpperCase() + name.slice(1).toLowerCase()
         this.userTime = time
         this.userLevel = level
         this.game = game
@@ -19,13 +19,15 @@ class LevelScore{
         this.playAudio( this.songVictory, 1.0, true )
         this.playAudio( this.songApplause, 1.0, true )
         this.generatePainel()
+        gameData.class = 'LevelScore'
+
     }
 
-    generatePainel(){                   //CRIA OS ELEMENTOS DOM DO PAINEL DO SCORE (INCLUINDO O HEADER)
+    generatePainel(){                                                           //CRIA OS ELEMENTOS DOM DO PAINEL DO SCORE (INCLUINDO O HEADER)    
         const container = document.createElement('div')
-        const painelHeader = document.createElement('div')
+        const painelHeader = document.createElement('p')
         const title = document.createElement('span')
-        const painelBody = document.createElement('div')
+        const painelBody = document.createElement('p')
         const painelFooter = document.createElement('div')
         
         this.element = document.createElement('div')
@@ -38,6 +40,12 @@ class LevelScore{
         title.classList.add('FIT')
         painelBody.classList.add('scoreBody')
         painelFooter.classList.add('scoreFooter')
+        
+        container.setAttribute('tabindex','2')
+        container.setAttribute('aria-label','Placar')
+        painelHeader.setAttribute('tabindex','3')
+        painelHeader.setAttribute('aria-label',`Parabens ${this.userName} !`)
+        painelBody.setAttribute('tabindex','4')
 
         painelHeader.appendChild(title)
         container.appendChild(painelHeader)
@@ -57,8 +65,11 @@ class LevelScore{
         const star2Container = document.createElement('div')
         const star3Container = document.createElement('div')
 
-        let [star1, star2, star3] = this.handleScore(this.userTime, this.userLevel)
-
+        let [star1, star2, star3, golden] = this.handleScore(this.userTime, this.userLevel)
+        if(gameData.isScreenReaderActive) golden = 3
+       
+        father.setAttribute('aria-label', `Você conseguiu ${golden} estrelas`)
+       
         star1Container.classList.add('star1')
         star2Container.classList.add('star2')
         star3Container.classList.add('star3')
@@ -77,14 +88,19 @@ class LevelScore{
         const gameInfo = document.createElement('div')
 
         gameInfo.classList.add('footerInfo')
-        const timeInfo = document.createElement('div')
-        const levelInfo = document.createElement('div')
+        const timeInfo = document.createElement('p')
+        const levelInfo = document.createElement('p')
 
         levelInfo.classList.add('levelInfo')
         timeInfo.classList.add('timeInfo')
         
         levelInfo.innerHTML = `Level <span>${this.userLevel}</span>`
         timeInfo.innerHTML = `<span>${this.userTime}s</span>`
+
+        levelInfo.setAttribute('tabindex','5')
+        levelInfo.setAttribute('aria-label', `na fase ${this.userLevel}`)
+        timeInfo.setAttribute('tabindex','6')
+        timeInfo.setAttribute('aria-label',`em ${this.userTime} segundos`)
 
         const levelImg = this.getImage('level')
         const clockImg = this.getImage('clock')
@@ -107,6 +123,11 @@ class LevelScore{
         btnNext.classList.add('btnNext')
         btnNext.classList.add('fa-solid')
         btnNext.classList.add('fa-forward')
+        
+        btnReplay.setAttribute('tabindex', '7')
+        btnReplay.setAttribute('aria-label', `Jogar Novamente`)
+        btnNext.setAttribute('tabindex', '8')
+        btnNext.setAttribute('aria-label', `Jogar próxima fase (momentaneamente indisponível)`)
 
         btnsContainer.appendChild(btnReplay)
         btnsContainer.appendChild(btnNext)
@@ -114,18 +135,74 @@ class LevelScore{
         father.appendChild(gameInfo)
         father.appendChild(btnsContainer)
         btnReplay.addEventListener('click', (e) => {
-            this.stopCurrentAudio()
-        
-            const gameBoard = document.getElementById('gameBoard')
+            let delay = gameData.isScreenReaderActive ? 4500 : 1000
+
+            if(gameData.isScreenReaderActive){
+                let aux = 3
+                this.readText('O jogo começa em', false)
+                setTimeout(() => {
+                    let countdown = setInterval(() => {
+                        if(aux <= 0 ) {
+                            clearInterval(countdown)
+                            
+                            return
+                        }else if(aux === 1){
+                            this.stopCurrentAudio()
+                            this.playAudio(this.transitionSong)
+                        }
+                        this.readText(aux, false)
+                        aux--
+                    }, 1000)
+                }, 500)
+
+            }else{
+                this.stopCurrentAudio()
+                this.playAudio(this.transitionSong)
+            }
+
+            setTimeout(() => {
+                const gameBoard = document.getElementById('gameBoard')
             
-            gameBoard.style.display = "grid"
-            this.element.style.display = 'none'
-            
-            this.game.gameDisplay.body.reset()
-            this.game.presetGameElements()
-            this.game.replayGame()
-            this.playAudio(this.transitionSong)
+                gameBoard.style.display = "grid"
+                this.element.style.display = 'none'
+                
+                this.game.gameDisplay.body.reset()
+                this.game.presetGameElements()
+                this.game.replayGame()
+            }, delay)
         })
+
+        btnNext.addEventListener('click', () => {
+            this.popUpMessage('A fase 2 está momentaneamente indisponível. Aguarde as próximas atualizações', '.btnNext', 6000)
+        })
+    }
+    popUpMessage(message, nxtElem, delay = 2500, isVisible = true, chaining = false){   // EXIBE MENSAGEM NO POPUP VISÍVEL
+        const popUp = document.getElementById('popUp')
+        const popupText = document.querySelector('.popupText')
+        const nextFocusElement = document.querySelector(nxtElem)
+        let display = popUp.style.display
+        
+        if(display != 'flex')   popUp.style.display = 'flex'
+        if(isVisible)
+            popUp.style.opacity = 1
+        
+        if(!chaining)
+            popupText.textContent = ''
+
+        popupText.setAttribute('tabindex', 1)
+        popupText.textContent = message
+        popupText.focus() 
+        
+        if(isVisible)
+            setTimeout(() => {
+                popUp.style.opacity = 0
+                popUp.style.display = 'none'
+            }, delay - 1000)
+        
+        if(nxtElem && gameData.isScreenReaderActive)
+            setTimeout(() => nextFocusElement.focus(), delay + 100)
+        
+        
     }
     handleScore(time, level){ //DEFINE AS ESTRELAS NO CORPO DO PAINEL
         const userTime = time
@@ -136,25 +213,30 @@ class LevelScore{
         let star1 = null
         let star2 = null
         let star3 = null
+        let golden = 0
         
         if(userTime < minTime){
             star1 = this.getImage('golden star 1')
             star2 = this.getImage('golden star 2')
             star3 = this.getImage('golden star 3')
+            golden = 3
         }else if(userTime < (minTime + 10)){
             star1 = this.getImage('golden star 1')
             star2 = this.getImage('golden star 2')
             star3 = this.getImage('steel star 3')
+            golden = 2
         } else if(userTime < maxTime){
             star1 = this.getImage('golden star 1')
             star2 = this.getImage('steel star 2')
             star3 = this.getImage('steel star 3')
+            golden = 1
         }else{
             star1 = this.getImage('steel star 1')
             star2 = this.getImage('steel star 2')
             star3 = this.getImage('steel star 3')
+            golden = 0
         }
-        return [star1, star2, star3];
+        return [star1, star2, star3, golden];
     }
     getImage(name){                 // RETORNA A IMAGEM DO OBJ GLOBAL, ARMAZENADA NO PRELOAD (BLOB)
         return gameAssets[name]
@@ -195,6 +277,14 @@ class LevelScore{
             this.currentAudio = []
         }
     }
+    readText(text, focusEle = null ,textChaining = false){                                       // LIDA COM TEXTOS DE LEITURA ACESSÍVEL IMEDIATA
+        if(gameData.lastAccText === text) text += `.`
+        const textToReaderEl = document.querySelector('.textToReader')
+
+        textToReaderEl.textContent = textChaining ? `${popupText.textContent} ${text}` : `${text}`
+        if(focusEle) focusEle.focus()
+        gameData.lastAccText = text
+    } 
 }
 
 export{

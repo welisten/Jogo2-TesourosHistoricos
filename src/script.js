@@ -9,6 +9,7 @@ const gameData = {
   isLibrasActive: false,
   lastAccText: '',
   isPaused: false,
+  class: 'Preload'
 } 
 
 new Preloader()
@@ -77,6 +78,7 @@ btnsAndClss.forEach( elemClassArr => {
       elemClassArr[0].addEventListener('click', (e) => {
         console.log(gameData)
         if(!gameData.isScreenReaderActive){ 
+          readText("O campo de accessibilidade auditiva foi ativado")
           elemClassArr[0].classList.toggle('active')
           accessibleContainer.classList.toggle('active')
           
@@ -100,7 +102,7 @@ btnsAndClss.forEach( elemClassArr => {
         screenReader_btn.classList.toggle('active')
         handleOutline(auxEmpty)
         
-        if(!gameData.isPaused && gameData.isScreenReaderActive){
+        if(!gameData.isPaused && gameData.isScreenReaderActive && gameData.class == 'MemoryGame'){
           document.querySelector('#gameControls').style.display = 'none'
         }
       })
@@ -137,13 +139,11 @@ btnsAndClss.forEach( elemClassArr => {
 });
 
 function handleOutline(aux){
-  const screenReader_btn = document.querySelector('.screenReader_btn')
   if(gameData.isScreenReaderActive){
     document.addEventListener('focus', handlerFocus, true)
     document.addEventListener('blur', handleBlur, true)
   }else{
     document.addEventListener('focus', handleBlur, true)
-
   }
 
   function handlerFocus(event){

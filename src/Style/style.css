@@ -20,6 +20,8 @@
     --blue-baby: #3498db;
     --blue-ruler: #1659af;
     --red-negative: #df2121;
+    --red-pause:#dd6161;
+    --green-play:#59a147;
 
 
     --transparent_a10: var(--transparent_a10);
@@ -175,6 +177,7 @@ main{                                                       /*TEMPORARIO*/
 }
 .introForm .formBody .nameInput{
     width: 100%;
+    font-size: clamp(1.6rem, 1.8rem, 2rem);
     border: 1px solid #67c2ff;
     box-shadow: 0 0 .5em rgba(29, 127, 255, 0.781);
     height: 5vh;
@@ -270,8 +273,10 @@ main{                                                       /*TEMPORARIO*/
     width: 5vh;
     opacity: 1;
     color: var(--blue-dark-theme);
-    background-color: #ffffff;
+    color: white;
+    background-color: var(--red-pause);
     border: 1px solid var(--blue-dark-theme);
+    border: 1px solid white;
 }
 
 

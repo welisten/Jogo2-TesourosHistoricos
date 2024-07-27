@@ -33,9 +33,10 @@ class MemoryGame {
         this.gameDisplay.user = this.user
         this.gameDisplay.bar.setBarName(this.user.name.split(' ')[0])
         this.gameDisplay.bar.updateBar()
+        gameData.class = 'MemoryGame'
     }
     presetGameElements(){       //PRÉ CONFIGURAÇÃO E CRIAÇÃO PARA AS REGUAS(HORIZ. VERTI.) E GAMEBOARD RESPECTIVAMENTE
-        document.title = `Seja bem vindo! a fase ${this.user.level + 1} começou`
+        document.title = `Seja bem vindo! a fase ${this.user.level + 1} começou !`
 
         const rulers = document.querySelectorAll('.ruler')
         rulers.forEach(ruler => ruler.style.display = 'flex')
@@ -85,6 +86,8 @@ class MemoryGame {
             }
             return outArray
         }
+        this.createPauseBtn()
+
 
     }
     generateCards() {              //PREENCHE O ARRAY DE CARDS DE MANEIRA ALEATÓRIA E ARBITRÁRIA COM INSTÂNCIAS DE CARDS
@@ -177,8 +180,9 @@ class MemoryGame {
         if(this.user.treasures == ( this.size / 2 / this.user.level)){
             this.stopCurrentAudio()
             document.getElementById('gameBoard').style.display = "none"
-            this.readText(`${c2Name}. Parabens ! você coletou todos os ${this.user.treasures} tesouros em ${this.gameDisplay.header.getTimer()} segundos ! por isso você ganhou 3 estrelas na fase ${this.user.level + 1}`)
-
+            this.readText(`${c2Name}. Parabens ! você coletou todos os ${this.user.treasures} tesouros em ${this.gameDisplay.header.getTimer()} segundos ! por isso você ganhou 3 estrelas na fase ${this.user.level}`)
+            document.title = `Placar da fase 1`
+            document.querySelector('.pause_btn').remove()
             new LevelScore(this.mainContainer, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this.gainNode, this.audioContext, this)
             this.gameDisplay.handleWin()
         }
@@ -188,7 +192,6 @@ class MemoryGame {
     }
     updateBoard(firstElemIdx = 0) {     //CRIA OS ELEMENTOS CARD (IMAGEN E CARTÃO) E OS CONFIGURA (EM TODA A ATUALIZAÇÃO OS CARDS SÃO RECRIADOS)
         const board = document.getElementById('gameBoard')
-        this.createPauseBtn()
 
         const elemArry = []
         let elem = gameData.isScreenReaderActive ? 'p' : 'div'
@@ -219,7 +222,7 @@ class MemoryGame {
             cardElement.addEventListener('click', (e) => {
                 if(this.isClickAble){   
                     this.flipCard(index, e)
-                    document.title = `${card.location.collumn}${card.location.row}`
+                    document.title = this.user.treasures <= 7 ? `${card.location.collumn}${card.location.row}` : `Placar da fase ${this.user.level}`
                 }
             });
             elemArry.push(cardElement)
@@ -254,8 +257,12 @@ class MemoryGame {
     }
     createPauseBtn(){
         const mainContainer =  document.querySelector('#gameContainer')
+        let isReplay = mainContainer.querySelector('.pause_btn')
+        if(isReplay) return
+       
         const pauseBtn = document.createElement('button')
         const btnIcon =  document.createElement('icon')
+
         let label = gameData.isPaused ? 'Play no jogo' : 'Pausar Jogo'
         let iconClass = gameData.isPaused ? 'fa-play' : 'fa-pause'
         
@@ -273,6 +280,11 @@ class MemoryGame {
             gameData.isPaused = !gameData.isPaused
             if(gameData.isScreenReaderActive){
               toggleDisplay(document.querySelector('#gameControls'), 'flex')
+            }
+            if(gameData.isPaused){
+                pauseBtn.style.backgroundColor = colors.green_play
+            }else{
+                pauseBtn.style.backgroundColor = colors.red_pause
             }
             let status = gameData.isPaused ? 'pausado' : 'liberado'
             this.readText(`O jogo foi ${status}.`)
@@ -304,6 +316,7 @@ class MemoryGame {
         this.gameDisplay.footer.updateFooterText('Desenvolvido por Wesley Welisten', this.fitTextContect)
         this.generateCards()
         this.startGame()
+        gameData.class = 'MemoryGame'
     }
     breakCursor(timeInMili){            //ALTERNA A HABILITAÇÃO DO CURSOR EM UM INTERVALO X
         this.isClickAble = !this.isClickAble
