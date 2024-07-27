@@ -148,7 +148,7 @@ class IntroForm {
             }else{
                 let delay = 2500
                 let popUpEl = document.querySelector('#popUp')
-                
+
                 popUpEl.style.display = 'flex'
                 popUpEl.classList.add('animated')
                 setTimeout(() => popUpEl.classList.remove('animated'), 1000)
@@ -220,7 +220,7 @@ class IntroForm {
         popupText.textContent = message
         popupText.focus() 
         
-        if(isVisible && gameData.isScreenReaderActive)
+        if(isVisible)
             setTimeout(() => {
                 popUp.style.opacity = 0
                 popUp.style.display = 'none'

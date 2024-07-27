@@ -177,7 +177,7 @@ class MemoryGame {
         if(this.user.treasures == ( this.size / 2 / this.user.level)){
             this.stopCurrentAudio()
             document.getElementById('gameBoard').style.display = "none"
-            this.readText(`${c2Name}. Parabens ! você coletou todos os ${this.user.treasures} tesouros em ${this.gameDisplay.header.getTimer()} segundos !`)
+            this.readText(`${c2Name}. Parabens ! você coletou todos os ${this.user.treasures} tesouros em ${this.gameDisplay.header.getTimer()} segundos ! por isso você ganhou 3 estrelas na fase ${this.user.level + 1}`)
 
             new LevelScore(this.mainContainer, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this.gainNode, this.audioContext, this)
             this.gameDisplay.handleWin()

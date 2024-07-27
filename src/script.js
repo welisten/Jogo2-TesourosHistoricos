@@ -5,7 +5,7 @@ const gameData = {
   intro: undefined, 
   isMute: false,
   isDarkMode: true,
-  isScreenReaderActive: true,
+  isScreenReaderActive: false,
   isLibrasActive: false,
   lastAccText: '',
   isPaused: false,
@@ -93,14 +93,14 @@ btnsAndClss.forEach( elemClassArr => {
       const screenReader_btn = document.querySelector('.screenReader_btn')
       let auxEmpty = ''
       elemClassArr[0].addEventListener('click', () => {
-        let status = gameData.isScreenReaderActive ? 'ativado' : 'desativado'
         gameData.isScreenReaderActive = !gameData.isScreenReaderActive
+        let status = gameData.isScreenReaderActive ? 'ativado' : 'desativado'
         
         readText(`O aprimoramento do leitor de tela foi ${status}.\n Para jogar no modo acessível para pessoas com deficiência visual recomendamos mantê-lo ativo.`)
         screenReader_btn.classList.toggle('active')
         handleOutline(auxEmpty)
         
-        if(gameData.isPaused && gameData.isScreenReaderActive){
+        if(!gameData.isPaused && gameData.isScreenReaderActive){
           document.querySelector('#gameControls').style.display = 'none'
         }
       })
@@ -138,12 +138,10 @@ btnsAndClss.forEach( elemClassArr => {
 
 function handleOutline(aux){
   const screenReader_btn = document.querySelector('.screenReader_btn')
-  if(screenReader_btn.classList.contains('active')){
-    console.log('ativo')
+  if(gameData.isScreenReaderActive){
     document.addEventListener('focus', handlerFocus, true)
     document.addEventListener('blur', handleBlur, true)
   }else{
-    console.log('desativo')
     document.addEventListener('focus', handleBlur, true)
 
   }
