@@ -105,7 +105,7 @@ class IntroForm {
         })
         nameInput.addEventListener('blur', ()=>{
             if(!nameInput.value){
-                nameLabel.style.transform = 'translateY(4.8vh)'
+                nameLabel.style.transform = 'translateY(5.5vh)'
                 nameLabel.style.color = colors.black
             }
         })
@@ -149,6 +149,7 @@ class IntroForm {
                 let delay = 2500
                 let popUpEl = document.querySelector('#popUp')
                 
+                popUpEl.style.display = 'flex'
                 popUpEl.classList.add('animated')
                 setTimeout(() => popUpEl.classList.remove('animated'), 1000)
                 
@@ -206,7 +207,9 @@ class IntroForm {
         const popUp = document.getElementById('popUp')
         const popupText = document.querySelector('.popupText')
         const nextFocusElement = document.querySelector(nxtElem)
+        let display = popUp.style.display
         
+        if(display != 'flex')   popUp.style.display = 'flex'
         if(isVisible)
             popUp.style.opacity = 1
         
@@ -218,7 +221,10 @@ class IntroForm {
         popupText.focus() 
         
         if(isVisible && gameData.isScreenReaderActive)
-            setTimeout(() => popUp.style.opacity = 0, 1500)
+            setTimeout(() => {
+                popUp.style.opacity = 0
+                popUp.style.display = 'none'
+            }, 1500)
         
         if(nxtElem && gameData.isScreenReaderActive)
             setTimeout(() => nextFocusElement.focus(), delay + 100)

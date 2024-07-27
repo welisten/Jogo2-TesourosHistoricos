@@ -51,10 +51,15 @@ class MemoryGame {
         board.setAttribute('tabindex', '1')
         board.setAttribute('aria-label', 'tabuleiro')
 
-        const btn = document.querySelector('.lightMode_btn')
-        btn.addEventListener('click', () => {
+        const lightBtn = document.querySelector('.lightMode_btn')
+        lightBtn.addEventListener('click', () => {
             this.toggleLight()
         })
+
+        if(gameData.isScreenReaderActive){
+            let controls = document.querySelector('#gameControls')
+            controls.style.display = 'none'
+        }
 
         this.orderedArray = createSortedArr(2, 17)
         this.unorderedArray = createUnsortedArr(2, 17)
@@ -182,11 +187,13 @@ class MemoryGame {
         this.updateBoard();                                                     // ATUALIZA DO JOGO
     }
     updateBoard(firstElemIdx = 0) {     //CRIA OS ELEMENTOS CARD (IMAGEN E CARTÃO) E OS CONFIGURA (EM TODA A ATUALIZAÇÃO OS CARDS SÃO RECRIADOS)
-        const board = document.getElementById('gameBoard');
+        const board = document.getElementById('gameBoard')
+        this.createPauseBtn()
+
         const elemArry = []
         let elem = gameData.isScreenReaderActive ? 'p' : 'div'
 
-        board.innerHTML = '';
+        board.innerHTML = ''
         this.cards.forEach((card, index) => {
             const cardElement = document.createElement(elem);
             const cardImage =  card.element
@@ -195,7 +202,7 @@ class MemoryGame {
             cardElement.addEventListener('focus', () => {
                 if(card.isFlipped){
                     let name = card.name.split("_")[0]
-                    cardElement.setAttribute('aria-label', `${name}. ${card.location.collumn}${card.location.row}`)
+                    cardElement.setAttribute('aria-label', `${card.location.collumn}${card.location.row}. ${name}`)
                 }
             })
             cardElement.setAttribute('tabindex', card.tabIndex) 
@@ -217,7 +224,7 @@ class MemoryGame {
             });
             elemArry.push(cardElement)
             board.appendChild(cardElement);
-        });
+        })
         this.mapCardsTabindex(firstElemIdx, elemArry)
     }
     fitTextContect(identificador){  // AQUI NÃO É O MELHOR LUGAR PARA ESSA FUNÇÃO
@@ -244,6 +251,51 @@ class MemoryGame {
         setTimeout(() => {
             this.playAudio(this.mainSong, .5, true)
         }, 1500)
+    }
+    createPauseBtn(){
+        const mainContainer =  document.querySelector('#gameContainer')
+        const pauseBtn = document.createElement('button')
+        const btnIcon =  document.createElement('icon')
+        let label = gameData.isPaused ? 'Play no jogo' : 'Pausar Jogo'
+        let iconClass = gameData.isPaused ? 'fa-play' : 'fa-pause'
+        
+        pauseBtn.setAttribute('class', 'pause_btn controlBtn')
+        pauseBtn.setAttribute('id', 'pause')
+        pauseBtn.setAttribute('tabindex', '18')
+        pauseBtn.setAttribute('aria-label', 'pausar jogo')
+        
+        btnIcon.setAttribute('class', `fa-solid ${iconClass}`)
+        pauseBtn.appendChild(btnIcon)
+        mainContainer.appendChild(pauseBtn)
+        
+        pauseBtn.addEventListener('click', () => {
+            toggleIconClass(btnIcon)
+            gameData.isPaused = !gameData.isPaused
+            if(gameData.isScreenReaderActive){
+              toggleDisplay(document.querySelector('#gameControls'), 'flex')
+            }
+            let status = gameData.isPaused ? 'pausado' : 'liberado'
+            this.readText(`O jogo foi ${status}.`)
+        })
+
+        function toggleDisplay(element, display){
+            let value = element.style.display
+            if(value != 'none'){
+                element.style.display = 'none'
+            }else{
+                element.style.display = display
+            }
+        }
+        function toggleIconClass(icon){
+            if(btnIcon.classList.contains('fa-pause')){
+              btnIcon.classList.remove('fa-pause')
+              btnIcon.classList.add('fa-play')
+            } else {
+              btnIcon.classList.remove('fa-play')
+              btnIcon.classList.add('fa-pause')
+            }
+        }
+
     }
 
     replayGame(){       // LIDA COM O USUARIO QUERER REPETIR A FASE

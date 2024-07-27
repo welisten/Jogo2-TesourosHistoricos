@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     transition: all 1s ease;
+    transition: outline 0s ease;
 }
 :root{  
     --glow-color: #bfdbff;
@@ -61,7 +62,7 @@ main{                                                       /*TEMPORARIO*/
     background-color: var(--blue-dark-9c);
     backdrop-filter: blur(50px);
     opacity: 0;
-    display: flex;
+    display: none;
     justify-content: center;
     transition: none;
     text-align: center;
@@ -164,12 +165,12 @@ main{                                                       /*TEMPORARIO*/
 }
 .introForm .formBody .nameLabel{
     width: 100%;
-    transform: translateY(4.8vh);
-    font-size: clamp(1.6rem, 1.8rem, 2rem);
+    transform: translateY(5.5vh);
+    font-size: clamp(2rem, 2.2rem, 2.4rem);
     text-transform: capitalize;
     transition: all .5s ease-in-out;
     padding-left: 3%;
-    margin-bottom: 1vh;
+    margin-bottom: 1.6vh;
     
     /* border: 1px solid red; */
 }
@@ -249,7 +250,7 @@ main{                                                       /*TEMPORARIO*/
     justify-content: space-around;
     transform: translateY(-50%);
 }
-#gameControls .controlBtn {
+.controlBtn {
     height: 4vh;
     width: 4vh;
     border: 1px solid white;
@@ -259,7 +260,19 @@ main{                                                       /*TEMPORARIO*/
     transition: 0.5s;
     transition-property: box-shadow;
     background: var(--blue-dark-theme);
+    opacity: 1;
 }
+.pause_btn{
+    position: absolute;
+    top: 0;
+    left: -20%;
+    font-size: 2rem;
+    height: 5vh;
+    width: 5vh;
+    opacity: 1;
+}
+
+
 #gameControls .controlBtn:hover {
     box-shadow: 0 0 5px rgb(68, 170, 253),
     0 0 25px rgb(68, 170, 253),
@@ -825,8 +838,8 @@ main{                                                       /*TEMPORARIO*/
         font-size: clamp(1.2rem, 1.4rem, 1.6rem);
     }
     .introForm .formBody .nameLabel{
-        font-size: clamp(1.2rem, 1.4rem, 1.6rem);
-        transform: translateY(4.8vh);
+        font-size: clamp(1.4rem, 1.6rem, 1.8rem);
+        transform: translateY(5.5vh);
 
     }
     .introForm .formBody .startBtn{

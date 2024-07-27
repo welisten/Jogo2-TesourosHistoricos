@@ -11,7 +11,7 @@ const colors = {
     blue_serius_ac7: '#1d7fffc7', // form shadow
     transparent_a10: '#ffffff10',
     transparent_a23: '#ffffff23', //form background
-
+    orange_blue_contrast: '#FFA500'
 }
 
 export {

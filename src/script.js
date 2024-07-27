@@ -3,11 +3,12 @@ import { Preloader } from './Scenes/Preload.js';
 const gameData = {
   isPreloadComplete: false,
   intro: undefined, 
-  isMute: true,
+  isMute: false,
   isDarkMode: true,
   isScreenReaderActive: true,
   isLibrasActive: false,
   lastAccText: '',
+  isPaused: false,
 } 
 
 new Preloader()
@@ -90,12 +91,20 @@ btnsAndClss.forEach( elemClassArr => {
 
     case 'screenReader_btn':
       const screenReader_btn = document.querySelector('.screenReader_btn')
+      let auxEmpty = ''
       elemClassArr[0].addEventListener('click', () => {
-        gameData.isScreenReaderActive = !gameData.isScreenReaderActive
         let status = gameData.isScreenReaderActive ? 'ativado' : 'desativado'
+        gameData.isScreenReaderActive = !gameData.isScreenReaderActive
+        
         readText(`O aprimoramento do leitor de tela foi ${status}.\n Para jogar no modo acessível para pessoas com deficiência visual recomendamos mantê-lo ativo.`)
         screenReader_btn.classList.toggle('active')
+        handleOutline(auxEmpty)
+        
+        if(gameData.isPaused && gameData.isScreenReaderActive){
+          document.querySelector('#gameControls').style.display = 'none'
+        }
       })
+      handleOutline(auxEmpty)
       break
 
     case 'lightMode_btn':
@@ -127,6 +136,32 @@ btnsAndClss.forEach( elemClassArr => {
   }
 });
 
+function handleOutline(aux){
+  const screenReader_btn = document.querySelector('.screenReader_btn')
+  if(screenReader_btn.classList.contains('active')){
+    console.log('ativo')
+    document.addEventListener('focus', handlerFocus, true)
+    document.addEventListener('blur', handleBlur, true)
+  }else{
+    console.log('desativo')
+    document.addEventListener('focus', handleBlur, true)
+
+  }
+
+  function handlerFocus(event){
+    aux = event.target.style.borderRadius
+
+    event.target.style.outline = '5px solid #FFA500'
+    event.target.style.outlineOffset = '5px'
+    event.target.style.borderRadius = '0px'
+  }
+
+  function handleBlur(event){
+    event.target.style.outline = 'none'
+    event.target.style.outlineOffset = 'none'
+    event.target.style.borderRadius = aux
+  }
+}
 export{
   gameData
 }
