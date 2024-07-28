@@ -120,7 +120,8 @@ class DisplayHeader{                // ESSA CLASSE SE DIFERENCIA DAS DEMAIS, REF
         this.element = ''
         this.timer = 0
         this.clockContainer = ''
-        this.counter = ''
+        this.counter = null
+        this.isCounterPaused = null
         this.cardInfo = [] //card name e card location
         this.generateHeaderDisplay()
     }
@@ -173,17 +174,35 @@ class DisplayHeader{                // ESSA CLASSE SE DIFERENCIA DAS DEMAIS, REF
         cardName.textContent = this.cardInfo[0]
         cardLocation.textContent =  this.cardInfo[1]
     }
-    startClock(){   
-        this.counter = setInterval(() => {
-            if((typeof this.timer) !== 'number'){
-                this.timer = 0
-                this.timer++
-            }else {
-                this.timer++
-            }
-            this.updateClockContainer()
-        }, 1000)
 
+    startClock(){   
+        if(!this.counter){
+            this.counter = setInterval(() => {
+                if((typeof this.timer) !== 'number')
+                    this.timer = 0
+
+                updateTimer()
+                this.updateClockContainer()
+            }, 1000)
+            this.isCounterPaused = false
+        }
+
+        const updateTimer = () => {
+            this.timer += 1
+        }
+
+    }
+    pauseClock(){
+        if(this.counter){
+            this.stopClock()
+            this.counter = null
+            this.isCounterPaused = true
+        }
+    }
+    resumeClock(){
+        if(this.isCounterPaused){
+            this.startClock()
+        }
     }
     stopClock(){
         clearInterval(this.counter)

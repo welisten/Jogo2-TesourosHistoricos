@@ -76,7 +76,6 @@ btnsAndClss.forEach( elemClassArr => {
       
     case 'libras_btn':
       elemClassArr[0].addEventListener('click', (e) => {
-        console.log(gameData)
         if(!gameData.isScreenReaderActive){ 
           readText("O campo de accessibilidade auditiva foi ativado")
           elemClassArr[0].classList.toggle('active')

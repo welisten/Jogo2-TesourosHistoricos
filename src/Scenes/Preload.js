@@ -75,6 +75,7 @@ class Preloader {
         progressBox.strokeRoundedRect((containerWidth - (containerWidth * .8)) / 2 , containerWidth * .85, containerWidth * .8, 20, 15);
         progressBox.setDepth(1)
         progressBar.setDepth(2)
+        
         const loadingText = this.make.text({
             x: containerWidth / 2,
             y: containerWidth * .8,

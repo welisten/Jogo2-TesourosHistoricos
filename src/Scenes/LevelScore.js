@@ -99,8 +99,17 @@ class LevelScore{
 
         levelInfo.setAttribute('tabindex','5')
         levelInfo.setAttribute('aria-label', `na fase ${this.userLevel}`)
+        
+        let timeInSec = this.game.gameDisplay.header.getTimer()
+        let timeInMin;
+        let restInSec;
+
+        if(timeInSec > 60){
+            timeInMin = Math.floor(timeInSec / 60)
+            restInSec = timeInSec % 60
+        }
         timeInfo.setAttribute('tabindex','6')
-        timeInfo.setAttribute('aria-label',`em ${this.userTime} segundos`)
+        timeInfo.setAttribute('aria-label',`em ${timeInMin ? `${timeInMin} minuto ${restInSec ? `e ${restInSec}` : ''}` : timeInSec} segundos`)
 
         const levelImg = this.getImage('level')
         const clockImg = this.getImage('clock')
@@ -173,7 +182,7 @@ class LevelScore{
         })
 
         btnNext.addEventListener('click', () => {
-            this.popUpMessage('A fase 2 está momentaneamente indisponível. Aguarde as próximas atualizações', '.btnNext', 6000)
+            this.popUpMessage('A fase 2 está momentaneamente indisponível. Aguarde as próximas atualizações', '.btnReplay', 6000)
         })
     }
     popUpMessage(message, nxtElem, delay = 2500, isVisible = true, chaining = false){   // EXIBE MENSAGEM NO POPUP VISÍVEL
@@ -215,28 +224,37 @@ class LevelScore{
         let star3 = null
         let golden = 0
         
-        if(userTime < minTime){
+        if(!gameData.isScreenReaderActive){
+            if(userTime < minTime){
+                star1 = this.getImage('golden star 1')
+                star2 = this.getImage('golden star 2')
+                star3 = this.getImage('golden star 3')
+                golden = 3
+            }else if(userTime < (minTime + 10)){
+                star1 = this.getImage('golden star 1')
+                star2 = this.getImage('golden star 2')
+                star3 = this.getImage('steel star 3')
+                golden = 2
+            } else if(userTime < maxTime){
+                star1 = this.getImage('golden star 1')
+                star2 = this.getImage('steel star 2')
+                star3 = this.getImage('steel star 3')
+                golden = 1
+            }else{
+                star1 = this.getImage('steel star 1')
+                star2 = this.getImage('steel star 2')
+                star3 = this.getImage('steel star 3')
+                golden = 0
+            }
+            return [star1, star2, star3, golden];
+        } else {
             star1 = this.getImage('golden star 1')
             star2 = this.getImage('golden star 2')
             star3 = this.getImage('golden star 3')
             golden = 3
-        }else if(userTime < (minTime + 10)){
-            star1 = this.getImage('golden star 1')
-            star2 = this.getImage('golden star 2')
-            star3 = this.getImage('steel star 3')
-            golden = 2
-        } else if(userTime < maxTime){
-            star1 = this.getImage('golden star 1')
-            star2 = this.getImage('steel star 2')
-            star3 = this.getImage('steel star 3')
-            golden = 1
-        }else{
-            star1 = this.getImage('steel star 1')
-            star2 = this.getImage('steel star 2')
-            star3 = this.getImage('steel star 3')
-            golden = 0
+            return [star1, star2, star3, golden];
+
         }
-        return [star1, star2, star3, golden];
     }
     getImage(name){                 // RETORNA A IMAGEM DO OBJ GLOBAL, ARMAZENADA NO PRELOAD (BLOB)
         return gameAssets[name]

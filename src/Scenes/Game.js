@@ -22,7 +22,7 @@ class MemoryGame {
         this.successSong = gameAssets['success']
         this.failSong = gameAssets['fail']
         this.gainNode = gainNode
-        this.currentAudio = null
+        this.currentAudio = {config:{startTime: 0, pausedAt: 0}}
         this.isClickAble = true
         this.unorderedArray = undefined
         this.orderedArray = undefined
@@ -36,7 +36,7 @@ class MemoryGame {
         gameData.class = 'MemoryGame'
     }
     presetGameElements(){       //PRÉ CONFIGURAÇÃO E CRIAÇÃO PARA AS REGUAS(HORIZ. VERTI.) E GAMEBOARD RESPECTIVAMENTE
-        document.title = `Seja bem vindo! a fase ${this.user.level + 1} começou !`
+        document.title = `Seja bem vindo! a fase ${this.user.level} começou !`
 
         const rulers = document.querySelectorAll('.ruler')
         rulers.forEach(ruler => ruler.style.display = 'flex')
@@ -150,6 +150,7 @@ class MemoryGame {
         const [card1, card2] = this.flippedCards;
         const c1Name = card1.name.split('_')[0]
         const c2Name = card2.name.split('_')[0]
+
         if (c1Name === c2Name) {
             card1.match();
             card2.match();
@@ -177,11 +178,20 @@ class MemoryGame {
 
             }, delay);
         }
-        if(this.user.treasures == ( this.size / 2 / this.user.level)){
+        if(this.user.treasures == ( this.size / 2 )){
+            let timeInSec = this.gameDisplay.header.getTimer()
+            let timeInMin;
+            let restInSec;
+
+            if(timeInSec > 60){
+                timeInMin = Math.floor(timeInSec / 60)
+                restInSec = timeInSec % 60
+            }
+
             this.stopCurrentAudio()
             document.getElementById('gameBoard').style.display = "none"
-            this.readText(`${c2Name}. Parabens ! você coletou todos os ${this.user.treasures} tesouros em ${this.gameDisplay.header.getTimer()} segundos ! por isso você ganhou 3 estrelas na fase ${this.user.level}`)
-            document.title = `Placar da fase 1`
+            this.readText(`Parabens ${this.user.name} ! você coletou todos os ${this.user.treasures} tesouros em ${timeInMin ? `${timeInMin} minutos ${restInSec ? `e ${restInSec}` : ''}` : timeInSec} segundos ! por isso você ganhou 3 estrelas na fase ${this.user.level}`)
+            document.title = `Placar da fase 1` // adjust
             document.querySelector('.pause_btn').remove()
             new LevelScore(this.mainContainer, this.user.name.split(' ')[0], this.gameDisplay.header.getTimer(), this.user.level, this.gainNode, this.audioContext, this)
             this.gameDisplay.handleWin()
@@ -281,10 +291,18 @@ class MemoryGame {
             if(gameData.isScreenReaderActive){
               toggleDisplay(document.querySelector('#gameControls'), 'flex')
             }
+
             if(gameData.isPaused){
+                this.stopCurrentAudio()
+                this.gameDisplay.header.pauseClock()
                 pauseBtn.style.backgroundColor = colors.green_play
+                this.isClickAble = false
             }else{
+                this.playAudio(this.mainSong, 1, true)
+                this.gameDisplay.header.resumeClock()
                 pauseBtn.style.backgroundColor = colors.red_pause
+                this.isClickAble = true
+
             }
             let status = gameData.isPaused ? 'pausado' : 'liberado'
             this.readText(`O jogo foi ${status}.`)
@@ -387,7 +405,6 @@ class MemoryGame {
                 }
             }
         }
-            
     }
     playAudio(audioBuffer, volume = 1.0, loop = false){
         const src = this.audioContext.createBufferSource()
@@ -399,13 +416,19 @@ class MemoryGame {
         
         src.connect(this.gainNode)
         this.gainNode.connect(this.audioContext.destination)
-        src.start()
-        if(loop === true) this.currentAudio = src
+        if(loop !== true){
+            src.start()
+
+        } else {
+            src.start(0, this.currentAudio.config.startTime)
+            this.currentAudio.audio = src
+        }
     }
     stopCurrentAudio(){
-        if(this.currentAudio) {
-            this.currentAudio.stop()
-            this.currentAudio = null
+        if(this.currentAudio.audio) {
+            this.currentAudio.config.startTime = this.audioContext.currentTime
+            this.currentAudio.audio.stop()
+            this.currentAudio.audio = null
         }
     }
 }

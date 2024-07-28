@@ -2,7 +2,7 @@ class User {
     constructor(nome){
         this.name = nome
         this.treasures = 0
-        this.level = 0
+        this.level = 1
     }
     // os getter e setter foram construidos para o meomento onde atributos serão privados
     getNome(){
